@@ -39,15 +39,15 @@ def locationpost(request):
         vbat = cleaned_json_post["vbat"]
         speed = cleaned_json_post["speed"][0:5]
         pint = cleaned_json_post["pInt"]
-        print(reqPOST)
-        if True:
+        
+        try:
             herdsman = Herdsman.objects.get(userid = devid)
 
             new_location = Location(herdsman = herdsman, lat = lat, lng = lng, speed = speed, )
             new_location.save()
             print(devid,time, etype, engine, lat, lng, vbat, speed)
         
-        
+        except:
             return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
     
 
