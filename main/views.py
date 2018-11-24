@@ -25,13 +25,36 @@ def locationpost(request):
     # print(request.body)
     if request.method == 'POST':    
 
-        reqPOST = str(json.loads(request.body))
+        reqPOST = (json.loads(request.body))
         raw_time = str(datetime.datetime.now())
+        cleaned_json_post = dict(reqPOST['resource'][0])
         clean_time = raw_time[:18]
 
-    print(reqPOST)
+        devid = cleaned_json_post["devid"] 
+        time  = cleaned_json_post["time"]
+        etype = cleaned_json_post["etype"]
+        engine = cleaned_json_post["engine"]
+        lat = cleaned_json_post["lat"]
+        lng = cleaned_json_post["lon"]
+        vbat = cleaned_json_post["vbat"]
+        speed = cleaned_json_post["speed"][0:5]
+        pint = cleaned_json_post["pInt"]
+        try:
+            herdsman = Herdsman.objects.get(userid = devid)
 
-    return HttpResponse(json.dumps({'success':'success'}))
+            new_location = Location(herdsman = herdsman, lat = lat, lng = lng, speed = speed, )
+            new_location.save()
+            print(devid,time, etype, engine, lat, lng, vbat, speed)
+        
+        except:
+            return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
+    
+
+    locations = Location.objects.all() # for iteration
+    result = serializers.serialize("json", locations )
+
+
+    return HttpResponse(json.dumps({herdsman.name : result}))
     
 # @csrf_exempt
 # def end(request):
