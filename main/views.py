@@ -16,6 +16,9 @@ host = 'http://localhost:8000/'
 def main(request):
     # print(request.body)
     herdsman = Herdsman.objects.all()
+
+    for man in herdsman:
+        print(man.lat, man.lng)
     return render(request, 'resolute/skin-compact.html', {"herdsman":herdsman})
 
 @csrf_exempt
@@ -24,29 +27,34 @@ def locationpost(request):
     
     # print(request.body)
     if request.method == 'POST':    
-
-        reqPOST = (json.loads(request.body))
-        raw_time = str(datetime.datetime.now())
-        cleaned_json_post = dict(reqPOST['resource'][0])
-        clean_time = raw_time[:18]
-
-        devid = cleaned_json_post["devid"] 
-        time  = cleaned_json_post["time"]
-        etype = cleaned_json_post["etype"]
-        engine = cleaned_json_post["engine"]
-        lat = cleaned_json_post["lat"]
-        lng = cleaned_json_post["lon"]
-        vbat = cleaned_json_post["vbat"]
-        speed = cleaned_json_post["speed"][0:5]
-        pint = cleaned_json_post["pInt"]
-        
         try:
-            herdsman = Herdsman.objects.get(userid = devid)
+            reqPOST = (json.loads(request.body))
+            raw_time = str(datetime.datetime.now())
+            cleaned_json_post = dict(reqPOST['resource'][0])
+            clean_time = raw_time[:18]
 
-            new_location = Location(herdsman = herdsman, lat = lat, lng = lng, speed = speed, )
+            devid = cleaned_json_post["devid"] 
+            time  = cleaned_json_post["time"]
+            etype = cleaned_json_post["etype"]
+            engine = cleaned_json_post["engine"]
+            lat = cleaned_json_post["lat"]
+            lng = cleaned_json_post["lon"]
+            vbat = cleaned_json_post["vbat"]
+            speed = cleaned_json_post["speed"][0:5]
+            pint = cleaned_json_post["pInt"]
+            
+            
+            address = helpers.get_address(lat,lng)
+            print(address)
+            herdsman = Herdsman.objects.get(userid = devid)
+            herdsman.lng = lng
+            herdsman.lat = lat
+            herdsman.address = address
+            herdsman.save()
+            new_location = Location(herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address)
             new_location.save()
             print(devid,time, etype, engine, lat, lng, vbat, speed)
-        
+    
         except:
             return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
     
@@ -80,21 +88,21 @@ def locationpost(request):
 #     return HttpResponse('Unrecognisable request method, cannot understand')
 
 
-# def check(request, slug):
+def check(request, slug):
 
-#     customer = Customer.objects.get(slug = slug) #for filtering get just one customer 
-#     customers = Customer.objects.filter(slug = slug) # for iteration
-#     locations = serializers.serialize("json", list(chain(Location.objects.filter(customer_id = customer.id)[:40], customers)) )
-
-
-
-#     return HttpResponse(locations)
+    herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer 
+    herdsmen = Herdsman.objects.filter(slug = slug) # for iteration
+    locations = serializers.serialize("json", list(chain(Location.objects.filter(herdsman_id = herdsman.id)[:40], herdsmen)) )
 
 
 
-# def track(request, slug):
+    return HttpResponse(locations)
 
-#     return render(request, 'resolute/tracking.html', {"slug":slug})
+
+
+def track(request, slug):
+
+    return render(request, 'resolute/realtracking.html', {"slug":slug})
 
 # def test(request):
 

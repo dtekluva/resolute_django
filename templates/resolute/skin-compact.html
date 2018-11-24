@@ -44,10 +44,10 @@
             // All options here: http://activmap.pandao.eu/doc/#options
             $('#activmap-wrapper').activmap({
                 places: [
-                    {% for driver in cars %}
-                    {title: '{{driver.name|upper}} {{driver.surname|upper}}', address: '{{driver.address}}', url: ' localhost:8000/track/{{driver.slug}}/', tags: ['tag_driver'], lat:  '{{driver.lat}}', lng:  '{{driver.lng}}',phone: '{{driver.phone}}', img: '{% static "images/photos/man.jpg" %}', icon: '{% static "images/icons/marker-car.png" %}'},
+                    {% for man in herdsman %}
+                    {title: '{{man.name|upper}} {{man.surname|upper}}', address: '{{man.address}}', url: ' localhost:8000/track/{{man.slug}}/', tags: ['tag_driver'], lat:  '{{man.lat}}', lng:  '{{man.lng}}',phone: '{{man.phone}}', img: '{% static "images/photos/cattle.jpg" %}', icon: '{% static "images/icons/marker-car.png" %}'},
                     {% endfor %}
-                    {title: 'OLOROGBOGBO AHMED', address: '81 Jermyn Street London SW1Y 6JF, United Kingdom', phone: '+44 20 7930 2111', url: 'https://activmap.pandao.eu/', tags: ['tag_driver'], lat: 51.507632, lng: -0.137779, img: '{% static "images/photos/man.jpg" %}', icon: '{% static "images/icons/marker-hotel-blue.png" %}'},
+                    {title: 'OLOROGBOGBO AHMED', address: '81 Jermyn Street London SW1Y 6JF, United Kingdom', phone: '+44 20 7930 2111', url: 'https://activmap.pandao.eu/', tags: ['tag_driver'], lat: 51.507632, lng: -0.137779, img: '{% static "images/photos/herd.jpg" %}', icon: '{% static "images/icons/marker-hotel-blue.png" %}'},
                     {title: 'Hilton London Tower Bridge', address: '5 More London Place, Tooley Street London SE1 2BY, United Kingdom', phone: '+44 20 3002 4300', url: 'https://activmap.pandao.eu/', tags: ['tag_driver'], lat: 51.504580, lng: -0.082737, img: 'images/photos/hilton-tower-bridge.jpg', icon: 'images/icons/marker-hotel-blue.png'},
                     //{title: 'Hertz Rent-A-Car', address: '35 Edgware Road London W2 2JE, United Kingdom', phone: '+44 870 844 8844', url: 'https://activmap.pandao.eu/', tags: ['shops_04'], lat: 51.514633, lng: -0.162566, img: 'images/photos/hilton-tower-bridge.jpg', icon: 'images/icons/marker-car-blue.png'},
                     //{title: 'Radiant Hair and Beauty Salon', address: '178 Jamaica Road London, UK SE16 4RT, United Kingdom', phone: '+44 20 7231 8833', url: 'https://activmap.pandao.eu/', tags: ['shops_01'], lat: 51.498222, lng: -0.062331, img: 'images/photos/thumb.jpg', icon: 'images/icons/marker-eye-blue.png'},
@@ -136,9 +136,9 @@
                 <div class="marker-selector">
                     <!-- Add checked="checked" to show the markers of this filter on page loading -->
                     <input type="checkbox" name="marker_type[]" value="tag_driver" id="tag_driver">
-                    <label for="tag_driver"><i class="fa fa-car"></i>Jigawa</label>
+                    <label for="tag_driver"><i class="fa fa-eye"></i>Jigawa</label>
                 </div>
-                <div class="marker-selector">
+                <!-- <div class="marker-selector">
                     <input type="checkbox" name="marker_type[]" value="Borno" id="Borno">
                     <label for="Borno"><i class="fa fa-bank"></i>Borno</label>
                 </div>
@@ -157,7 +157,7 @@
                 <div class="marker-selector">
                     <input type="checkbox" name="marker_type[]" value="Yobe" id="Yobe">
                     <label for="Yobe"><i class="fa fa-bank"></i>Yobe</label>
-                </div>
+                </div> -->
                 <!-- <div class="marker-selector">
                     <input type="checkbox" name="marker_type[]" value="tag_health" id="tag_health">
                     <label for="tag_health"><i class="fa fa-heartbeat"></i>Nassarawa</label>

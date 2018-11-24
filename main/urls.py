@@ -20,7 +20,8 @@ from . import views
 urlpatterns = [
     path('', views.main, name='main'),
     path('locationpost', views.locationpost, name='locationpost'),
-    # path('check/<slug:slug>/', views.check, name='check'),
-    # path('track/<slug:slug>/', views.track, name='track'),
+    # path('track', views.track, name='track')
+    path('check/<slug:slug>/', views.check, name='check'),
+    path('track/<slug:slug>/', views.track, name='track'),
     # path('test', views.test, name='test'),
 ]
