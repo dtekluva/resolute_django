@@ -39,6 +39,7 @@ def locationpost(request):
         vbat = cleaned_json_post["vbat"]
         speed = cleaned_json_post["speed"][0:5]
         pint = cleaned_json_post["pInt"]
+        print(reqPOST)
         try:
             herdsman = Herdsman.objects.get(userid = devid)
 
