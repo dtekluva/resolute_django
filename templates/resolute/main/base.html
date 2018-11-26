@@ -1,6 +1,5 @@
-﻿<!DOCTYPE html>
-
-{% load static %}
+﻿{% load static %}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -8,12 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="images/favicon.ico">
+    <link rel="icon" href="{% static "images/favicon.ico" %}">
 
     <title>Resolute 4.0 Admin - Dashboard</title>
     
-  <!-- Bootstrap 4.0-->
-  <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+	<!-- Bootstrap 4.0-->
 
 	<link rel="stylesheet" href="{% static "assets/vendor_components/bootstrap/dist/css/bootstrap.css" %}">
 	
@@ -48,7 +46,7 @@
       <!-- mini logo -->
 	  <b class="logo-mini">
 	
-		  <span class="dark-logo"><img src="images/logo.png" alt="logo"></span>
+		  <span class="dark-logo"><img src="{% static "images/logo.png" %}" alt="logo"></span>
 	  </b>
     
     </a>
@@ -160,11 +158,9 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  {% block content %}
 
 
 
-  {% endblock %}
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     <div class="pull-right d-none d-sm-inline-block">
