@@ -1,0 +1,386 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static "images/favicon.ico" %}">
+
+    <title>Resolute 4.0 Admin - Dashboard</title>
+    
+	<!-- Bootstrap 4.0-->
+
+	<link rel="stylesheet" href="{% static "assets/vendor_components/bootstrap/dist/css/bootstrap.css" %}">
+	
+	<!-- Bootstrap extend-->
+	<link rel="stylesheet" href="{% static "css/bootstrap-extend.css" %}">
+	
+	<!-- theme style -->
+	<link rel="stylesheet" href="{% static "css/master_style.css" %}">
+	
+	<!-- Qixa Admin skins -->
+	<link rel="stylesheet" href="{% static "css/skins/_all-skins.css" %}">	
+	  
+    <!-- morris CSS -->	
+	<link rel="stylesheet" href="{% static "assets/vendor_components/morris.js/morris.css" %}">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+     
+  </head>
+
+<body class="hold-transition skin-black dark-sidebar sidebar-mini">
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+    <a href="index.html" class="logo">
+      <!-- mini logo -->
+	  <b class="logo-mini">
+	
+		  <span class="dark-logo"><img src="{% static "images/logo.png" %}" alt="logo"></span>
+	  </b>
+    
+    </a>
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div>
+		  <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+			<i class="ti-align-left"></i>
+		  </a>
+		  <a id="toggle_res_search" data-toggle="collapse" data-target="#search_form" class="res-only-view" href="javascript:void(0);"><i class="mdi mdi-magnify"></i></a>
+		  <form id="search_form" role="search" class="top-nav-search pull-left collapse">
+			<div class="input-group">
+				<input type="text" name="example-input1-group2" class="form-control" placeholder="Search">
+				<span class="input-group-btn">
+				<button type="button" class="btn  btn-default" data-target="#search_form" data-toggle="collapse" aria-label="Close" aria-expanded="true"><i class="mdi mdi-magnify"></i></button>
+				</span>
+			</div>
+		  </form> 
+		
+	  </div>
+
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">		  
+          <!-- Messages -->
+       
+		  <!-- User Account-->
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="mdi mdi-account"></i>
+            </a>
+            <ul class="dropdown-menu scale-up">
+              <!-- User image -->
+              <li class="user-header">
+                <img src="../images/user2-280x160.jpg" class="img-fluid" alt="User Image">
+              </li>
+              <!-- Menu Body -->
+              <li class="user-body">
+                <div class="row no-gutters">
+                  <div class="col-12 text-left">
+                    <a href="#"><i class="ion ion-person"></i> My Profile</a>
+                  </div>
+                  <div class="col-12 text-left">
+                    <a href="#"><i class="ion ion-email-unread"></i> Inbox</a>
+                  </div>
+                  <div class="col-12 text-left">
+                    <a href="#"><i class="ion ion-settings"></i> Setting</a>
+                  </div>
+				<div role="separator" class="divider col-12"></div>
+				  <div class="col-12 text-left">
+                    <a href="#"><i class="ti-settings"></i> Account Setting</a>
+                  </div>
+				<div role="separator" class="divider col-12"></div>
+				  <div class="col-12 text-left">
+                    <a href="login.html"><i class="fa fa-power-off"></i> Logout</a>
+                  </div>				
+                </div>
+                <!-- /.row -->
+              </li>
+            </ul>
+          </li>	
+          <!-- Control Sidebar Toggle Button -->
+          <li>
+            <a href="#" data-toggle="control-sidebar"><i class="fa fa-cog fa-spin"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+    <!-- sidebar-->
+    <section class="sidebar">
+      
+      <!-- sidebar menu-->
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="active">
+          <a href="index.html">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+          </a>
+        </li>
+      
+	
+		
+        <li class="">
+          <a href="table.html">
+            <i class="fa fa-table"></i> <span>Reports</span>
+          </a>
+        </li>		
+
+        <li class="">
+          <a href="map.html">
+            <i class="fa fa-map"></i> <span>Map</span>
+          </a>
+        </li>
+		
+        </li>        
+        
+      </ul>
+    </section>
+	  
+	<div class="sidebar-footer">
+		<!-- item-->
+		
+		<!-- item-->
+		<a href="login.html" class="link" data-toggle="tooltip" title="Logout" data-original-title="Logout"><i class="fa fa-power-off"></i></a>
+	</div>
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Control panel</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="breadcrumb-item active">Dashboard</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+		
+	  <div class="row">
+        <div class="col-xl-3 col-md-6 col-12">
+          	<div class="box box-body box-inverse bg-info">
+              <h6 class="mb-0">
+                <span class="text-uppercase">HERDSMAN</span>
+                <span class="float-right"><a class="btn btn-xs btn-primary" href="#">View</a></span>
+              </h6>
+              <br>
+			  <small>Total Registered</small>
+              <p class="font-size-26">450</p>
+
+              <div class="progress progress-xxs mt-0 mb-10">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 35%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <div class="font-size-12"><i class="ion-arrow-graph-up-right text-success mr-1"></i> 18% of total herdsman</div>
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xl-3 col-md-6 col-12">
+          	<div class="box box-body box-inverse bg-success">
+              <h6 class="mb-0">
+                <span class="text-uppercase">FARMERS</span>
+                <span class="float-right"><a class="btn btn-xs btn-primary" href="#">View</a></span>
+              </h6>
+              <br>
+			  <small>Total Registered</small>
+              <p class="font-size-26">1,200</p>
+
+              <div class="progress progress-xxs mt-0 mb-10">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 75%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <div class="font-size-12"><i class="ion-arrow-graph-up-right text-success mr-1"></i> 22% of total farmers</div>
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xl-3 col-md-6 col-12">
+          	<div class="box box-body box-inverse bg-danger">
+              <h6 class="mb-0">
+                <span class="text-uppercase">STATES</span>
+                <span class="float-right"><a class="btn btn-xs btn-primary" href="#">View</a></span>
+              </h6>
+              <br>
+			  <small>Present In Nigeria</small>
+              <p class="font-size-26">24</p>
+
+              <div class="progress progress-xxs mt-0 mb-10">
+                <div class="progress-bar bg-info" role="progressbar" style="width: 55%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <div class="font-size-12"><i class="ion-arrow-graph-down-right text-danger mr-1"></i> 12 More States to go</div>
+            </div>
+        </div>
+        <!-- /.col -->
+        <div class="col-xl-3 col-md-6 col-12">
+          	<div class="box box-body box-inverse bg-warning">
+              <h6 class="mb-0">
+                <span class="text-uppercase">INCIDENCES</span>
+                <span class="float-right"><a class="btn btn-xs btn-primary" href="#">View</a></span>
+              </h6>
+              <br>
+			  <small>Across All The States</small>
+              <p class="font-size-26">27</p>
+
+              <div class="progress progress-xxs mt-0 mb-10">
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 52%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <div class="flexbox font-size-12">
+                <span><i class="ion-arrow-graph-down-right text-success mr-1"></i>Measured as National Total </span>
+              </div>
+            </div>
+        </div>
+        <!-- /.col -->		  
+      </div>
+	  <div class="row">			
+			
+			
+			<!-- /.col -->				
+			<div class="col-12 col-lg-12">
+				
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Most Recent Reports</h3>
+              <h6 class="box-subtitle"></h6>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+        <div class="table-responsive">
+          <table id="example" class="table table-bordered table-hover table-display nowrap margin-top-10 w-p100 ">
+          <thead>
+            <tr>
+              <th>Hersdman</th>
+              <th>State</th>
+              <th>Location</th>
+              <th>Speed(KM/hr)</th>
+              <th>Date</th>
+              <th>Population</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mallam Adamu</td>
+              <td>Nassarawa</td>
+              <td>42 Montgomery Road, Yaba</td>
+              <td>100</td>
+              <td>2011/04/25</td>
+              <td>300</td>
+            </tr>
+            <tr>
+               <td>Mallam Adamu</td>
+              <td>Nassarawa</td>
+              <td>42 Montgomery Road, Yaba</td>
+              <td>100</td>
+              <td>2011/04/25</td>
+              <td>300</td>
+            </tr>
+            <tr>
+              <td>Mallam Adamu</td>
+              <td>Nassarawa</td>
+              <td>42 Montgomery Road, Yaba</td>
+              <td>100</td>
+              <td>2011/04/25</td>
+              <td>300</td>
+            </tr>
+            <tr>
+              <td>Mallam Adamu</td>
+              <td>Nassarawa</td>
+              <td>42 Montgomery Road, Yaba</td>
+              <td>100</td>
+              <td>2011/04/25</td>
+              <td>300</td>
+            </tr>
+            <tr>
+               <td>Mallam Adamu</td>
+              <td>Nassarawa</td>
+              <td>42 Montgomery Road, Yaba</td>
+              <td>100</td>
+              <td>2011/04/25</td>
+              <td>300</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+			<!-- /.col -->
+		</div>
+      
+	</section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="pull-right d-none d-sm-inline-block">
+        
+    </div>
+	  &copy; 2018 <a href="https://www.resolute40.com/">Resolute 4.0</a>. All Rights Reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+
+  <!-- /.control-sidebar -->
+  
+  <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+  
+</div>
+<!-- ./wrapper -->
+  	
+	 
+	  
+	<!-- jQuery 3 -->
+	<script src="{% static "assets/vendor_components/jquery-3.3.1/jquery-3.3.1.min.js" %}"></script>
+	
+	<!-- jQuery UI 1.11.4 -->
+	<script src="{% static "assets/vendor_components/jquery-ui/jquery-ui.js" %}"></script>
+	
+	<!-- popper -->
+	<script src="{% static "assets/vendor_components/popper/dist/popper.min.js" %}"></script>
+	
+	<!-- Bootstrap 4.0-->
+	<script src="{% static "assets/vendor_components/bootstrap/dist/js/bootstrap.js" %}"></script>	
+	
+	<!-- Slimscroll -->
+	<script src="{% static "assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js" %}"></script>
+	
+	<!-- FastClick -->
+	<script src="{% static "assets/vendor_components/fastclick/lib/fastclick.js" %}"></script>
+	
+	<!-- Sparkline -->
+	<script src="{% static "assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.min.js" %}"></script>
+	
+	<!-- morris-->
+	<script src="{% static "assets/vendor_components/raphael/raphael.js" %}"></script>	
+	<script src="{% static "assets/vendor_components/morris.js/morris.js" %}"></script>	
+	
+	<!-- peity -->
+	<script src="{% static "assets/vendor_components/jquery.peity/jquery.peity.js" %}"></script>
+	
+	<!-- Qixa Admin App -->
+	<script src="{% static "js/template.js" %}"></script>
+	
+	<!-- Qixa Admin dashboard demo (This is only for demo purposes) -->
+	<script src="{% static "js/pages/dashboard.js" %}"></script>
+   <script src="{% static "assets/vendor_components/datatable/datatables.min.js" %}"></script>
+  
+  <!-- Qixa Admin for Data Table -->
+  <script src="{% static "js/pages/data-table.js" %}"></script>
+	
+</body>
+</html>

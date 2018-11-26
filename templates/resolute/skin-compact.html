@@ -45,7 +45,7 @@
             $('#activmap-wrapper').activmap({
                 places: [
                     {% for man in herdsman %}
-                    {title: '{{man.name|upper}} {{man.surname|upper}}', address: '{{man.address}}', url: ' localhost:8000/track/{{man.slug}}/', tags: ['tag_driver'], lat:  '{{man.lat}}', lng:  '{{man.lng}}',phone: '{{man.phone}}', img: '{% static "images/photos/cattle.jpg" %}', icon: '{% static "images/icons/marker-car.png" %}'},
+                    {title: '{{man.name|upper}} {{man.surname|upper}}', address: '{{man.address}}', url: ' http://resolute40.pythonanywhere.com/track/{{man.slug}}/', tags: ['tag_driver'], lat:  '{{man.lat}}', lng:  '{{man.lng}}',phone: '{{man.phone}}', img: '{% static "images/photos/cattle.jpg" %}', icon: '{% static "images/icons/marker-car.png" %}'},
                     {% endfor %}
                     {title: 'OLOROGBOGBO AHMED', address: '81 Jermyn Street London SW1Y 6JF, United Kingdom', phone: '+44 20 7930 2111', url: 'https://activmap.pandao.eu/', tags: ['tag_driver'], lat: 51.507632, lng: -0.137779, img: '{% static "images/photos/herd.jpg" %}', icon: '{% static "images/icons/marker-hotel-blue.png" %}'},
                     {title: 'Hilton London Tower Bridge', address: '5 More London Place, Tooley Street London SE1 2BY, United Kingdom', phone: '+44 20 3002 4300', url: 'https://activmap.pandao.eu/', tags: ['tag_driver'], lat: 51.504580, lng: -0.082737, img: 'images/photos/hilton-tower-bridge.jpg', icon: 'images/icons/marker-hotel-blue.png'},

@@ -13,7 +13,12 @@ from snippet import helpers
 
 host = 'http://localhost:8000/'
 
-def main(request):
+def index(request):
+    
+    return render(request, 'resolute/main/index.html')
+
+
+def detail_view(request):
     # print(request.body)
     herdsman = Herdsman.objects.all()
 
@@ -43,7 +48,7 @@ def locationpost(request):
             speed = cleaned_json_post["speed"][0:5]
             pint = cleaned_json_post["pInt"]
             
-            
+        # if lat != '0' and lng != '0' :
             address = helpers.get_address(lat,lng)
             print(address)
             herdsman = Herdsman.objects.get(userid = devid)
