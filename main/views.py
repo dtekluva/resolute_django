@@ -14,8 +14,10 @@ from snippet import helpers
 host = 'http://localhost:8000/'
 
 def index(request):
-    
-    return render(request, 'resolute/main/index.html')
+    locations = Location.objects.all().order_by('-date')
+    # result = serializers.serialize("json", locations )
+
+    return render(request, 'resolute/main/index.html', {'posts':locations})
 
 
 def detail_view(request):
