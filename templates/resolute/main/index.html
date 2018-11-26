@@ -152,7 +152,7 @@
             </tr> -->
             {% for post in posts %}
             <tr>
-               <td>{{post.herdsman | title}}</td>
+               <td>{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</td>
               <td>Nassarawa</td>
               <td>Lat : {{post.lat}},Lng : {{post.lng}}</td>
               <td>{{post.speed}}</td>

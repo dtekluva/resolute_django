@@ -28,6 +28,14 @@ def detail_view(request):
         print(man.lat, man.lng)
     return render(request, 'resolute/skin-compact.html', {"herdsman":herdsman})
 
+
+def table(request):
+    locations = Location.objects.all().order_by('-date')
+    # result = serializers.serialize("json", locations )
+
+    return render(request, 'resolute/main/table.html', {'posts':locations})
+
+
 @csrf_exempt
 def locationpost(request):
 # Create your views here.
