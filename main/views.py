@@ -119,9 +119,9 @@ def track(request, slug):
 
     return render(request, 'resolute/realtracking.html', {"slug":slug})
 
-# def test(request):
+def trail(request, slug):
 
-#     return render(request, 'resolute/test.html')
+    return render(request, 'resolute/trail.html', {"slug":slug})
 
 def check_distance(old_coord, new_coord):
 

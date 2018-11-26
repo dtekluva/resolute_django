@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>JQuery Activ'Map Plugin Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+    <script src="{%  static "bootstrap/js/bootstrap.min.js" %}"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvvVEqrwQt8LmAzlB99zmrwWR3vxPDs8w"></script>
+    <!--
+    As per Google recent announcement, usage of the Google Maps APIs now requires a key.
+    If you are using the Google Maps API on localhost or your domain was not active prior to June 22nd, 2016, it will require a key going forward.
+    Add your own Google Maps API key.
+    Here is the link to get your key: https://console.developers.google.com/flows/enableapi?apiid=maps_backend&keyType=CLIENT_SIDE&reusekey=true
+    
+    Replace the script above with: <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=YOUR_OWN_API_KEY"></script>
+    -->
+    
+    <!-- Activ'Map plugin -->
+    <link rel="stylesheet" href="{% static "bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "/jquery-activmap/css/skin-compact/activmap-compact.css" %}">
+    <link rel="stylesheet" href="{%  static "/jquery-activmap/css/skin-compact/activmap-dark.css" %}">
+
+    
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,300,700">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+        <!-- <script>
+            var slug_ = document.getElementById("slug");
+            console.log(slug)
+        </script> -->
+    </head>
+<body>
+<div id="activmap-wrapper">
+    <!-- Places panel (auto removable) -->
+    <!-- <div id="activmap-places">
+        <div id="activmap-results-num"></div>
+    </div> -->
+    
+    <!-- Activ'Map global wrapper -->
+    <div id="activmap-container">
+        <!-- Toolbar -->
+        <!--<div id="activmap-ui-wrapper">
+            <div id="activmap-search">
+                
+                <input id="activmap-location" type="text" name="location" value="" placeholder="Location...">
+                
+                <a class="activmap-action" id="activmap-geolocate" href="#"><i class="fa fa-crosshairs"></i></a>
+                
+                <a class="activmap-action" id="activmap-reset" href="#"><i class="fa fa-ban"></i></a>
+                
+                <a class="activmap-action" id="activmap-target" href="#"><i class="fa fa-bullseye"></i></a>
+                
+                <div>
+                    Radius:
+                    <small>
+                        <input type="radio" name="activmap_radius" value="0"> None
+                        <input type="radio" name="activmap_radius" value="3"> 3km
+                        <input type="radio" name="activmap_radius" value="20"> 20km
+                        <input type="radio" name="activmap_radius" value="50"> 50km
+                        <input type="radio" name="activmap_radius" value="100"> 100km
+                    </small>
+                
+                </div>
+            </div>
+        
+            <div id="activmap-filters">
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_hotel" id="tag_hotel">
+                    <label for="tag_hotel"><i class="fa fa-hotel"></i>Hotels</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_museum" id="tag_museum">
+                    <label for="tag_museum"><i class="fa fa-bank"></i>Museums</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_health" id="tag_health">
+                    <label for="tag_health"><i class="fa fa-heartbeat"></i>Health</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_worship" id="tag_worship">
+                    <label for="tag_worship"><i class="fa fa-bell"></i>Worship</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_safety" id="tag_safety">
+                    <label for="tag_safety"><i class="fa fa-support"></i>Safety</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_school" id="tag_school">
+                    <label for="tag_school"><i class="fa fa-graduation-cap"></i>Schools</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_food" id="tag_food">
+                    <label for="tag_food"><i class="fa fa-cutlery"></i>Food</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_shop" id="tag_shop">
+                    <label for="tag_shop"><i class="fa fa-shopping-bag"></i>Shops</label>
+                </div>
+                <div class="marker-selector">
+                    <input type="checkbox" name="marker_type[]" value="tag_sport" id="tag_sport">
+                    <label for="tag_sport"><i class="fa fa-soccer-ball-o"></i>Sports</label>
+                </div>
+            </div>
+        </div>-->
+
+        <!-- Map container REQUIRED -->
+        <div id="activmap-canvas"></div>
+    </div>
+    <input id="slug" value="{{slug}}" type="hidden">
+</div>
+<script src="{%  static "jquery-activmap/js/script.js" %}"></script> 
+</body>
+</html>

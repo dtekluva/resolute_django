@@ -25,5 +25,6 @@ urlpatterns = [
     # path('track', views.track, name='track')
     path('check/<slug:slug>/', views.check, name='check'),
     path('track/<slug:slug>/', views.track, name='track'),
+    path('trail/<slug:slug>/', views.trail, name='trail'),
     # path('test', views.test, name='test'),
 ]
