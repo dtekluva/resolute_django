@@ -124,7 +124,7 @@
       
       <!-- sidebar menu-->
       <ul class="sidebar-menu" data-widget="tree">
-        <li class="active">
+        <li class="{% if page == 'index' %}active {% endif %}">
           <a href="/">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
           </a>
@@ -132,13 +132,13 @@
       
 	
 		
-        <li class="">
+        <li class="{% if page == 'table' %}active {% endif %}">
           <a href="/table">
             <i class="fa fa-table"></i> <span>Reports</span>
           </a>
         </li>		
 
-        <li class="">
+        <li class="{% if page == 'map' %}active {% endif %}">
           <a href="/mapping/alamu">
             <i class="fa fa-map"></i> <span>Map</span>
           </a>

@@ -19,22 +19,22 @@ host = 'http://localhost:8000/'
 
 def index(request):
     locations = Location.objects.all().order_by('-id')
-
-    return render(request, 'resolute/main/index.html', {'posts':locations})
+    page = 'index'
+    return render(request, 'resolute/main/index.html', {'posts':locations, 'page': page})
 
 
 def detail_view(request):
+
     herdsman = Herdsman.objects.all()
 
-    for man in herdsman:
-        print(man.lat, man.lng)
     return render(request, 'resolute/skin-compact.html', {"herdsman":herdsman})
 
 
 def table(request):
-    locations = Location.objects.all().order_by('-date')
 
-    return render(request, 'resolute/main/table.html', {'posts':locations})
+    locations = Location.objects.all().order_by('-date')
+    page = 'table'
+    return render(request, 'resolute/main/table.html', {'posts':locations, 'page': page})
 
 
 @csrf_exempt
@@ -125,8 +125,11 @@ def track(request, slug):
     return render(request, 'resolute/realtracking.html', {"slug":slug})
 
 def mapping(request, slug):
+
     herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer 
-    return render(request, 'resolute/main/map.html', {"herdsman":herdsman, 'slug':slug})
+    page = 'map'
+    
+    return render(request, 'resolute/main/map.html', {"herdsman":herdsman, 'slug':slug,  'page': page})
 
 def trail(request, slug):
 
