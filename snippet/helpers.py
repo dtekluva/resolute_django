@@ -12,11 +12,12 @@ def get_address(lat, lng):
         print('-------------------',location.raw)
         address = location.address
         print('-----------------------',address)
-
+        state = dict(location.raw)['address']['state']
         if address is None:
             raise Exception()
         
     except:
         address = "Sorry Unable To Collect Google Location At The Moment"
+        state = "Not available"
     
-    return (address)
+    return {'address':address, 'state':state}

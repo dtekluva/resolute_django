@@ -1,6 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from datetime import date
+from datetime import date, datetime
 
 # Create your models here.
 class Herdsman(models.Model):
@@ -12,6 +12,7 @@ class Herdsman(models.Model):
     lat             = models.FloatField(max_length=100,blank=True, default=0)
     slug            = models.SlugField(blank=True,unique=True)
     address         = models.TextField(default=0)
+    state         = models.TextField(default=0)
     last_post       = models.DateField(auto_now_add=True, blank=True)
     is_trespassing  = models.BooleanField(default = False)
     date            = models.DateField(auto_now_add=True)
@@ -33,7 +34,8 @@ class Location(models.Model):
     speed           = models.FloatField(max_length=100,blank=True, default=0)
     accuracy        = models.FloatField(max_length=100,blank=True, default=0)
     address         = models.TextField(default=0)
-    date            = models.DateTimeField(auto_now_add=True)
+    state           = models.TextField(default=0)
+    date            = models.DateTimeField(default=datetime.now(), blank=True)
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.lat) + str(self.lng)
@@ -61,5 +63,3 @@ class Bound(models.Model):
 
     class Meta:
         ordering = ('date',)
-
-

@@ -8,16 +8,16 @@ var x = 0;
 var lineCoordinates = [];
 var addresses = [];
 const slug = document.getElementById("slug").value;
-console.log(slug);
 
  var promise = $.getJSON(host + "check/" + slug);
 
  promise.done(function(res) {
     result = res
+    console.log(result[result.length-1].fields.lat)
     pos = [result[result.length - 1].fields.lat,  result[result.length - 1].fields.lng]
-    var latlng = new google.maps.LatLng(pos[0],pos[1]);
+    var latlng = new google.maps.LatLng(position[0],position[1]);
     let myOptions = {
-        zoom: 19,
+        zoom: 18,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -37,7 +37,7 @@ console.log(slug);
                    async: true,
              success: function(res) {
                  result = (JSON.parse(res))
-                 console.log((result))
+                //  console.log((result))
     
                  pos = [result[result.length - 1].fields.lat,  result[result.length - 1].fields.lng]
                  transition(pos);
@@ -85,6 +85,7 @@ console.log(slug);
  
  function transition(result){
      latlng = new google.maps.LatLng(result[0], result[1])
+     console.log(result)
      trail_map.setCenter(latlng);
      //   console.log(lineCoordinates);
        i = 0;

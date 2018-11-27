@@ -7,7 +7,7 @@ host = 'http://localhost:8000/'
     function initialize() { 
         var latlng = new google.maps.LatLng(position[0], position[1]);
         var myOptions = {
-            zoom: 16,
+            zoom: 15,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -152,7 +152,7 @@ var load_trail = (()=>{
                                 position: latlng,
                                 map: trail_map,
                                 title:  element.fields.address + ` - @${String(_time)}`,
-                                icon :  'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+                                icon :  'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
 
                             });
                         }   

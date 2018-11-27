@@ -26,5 +26,6 @@ urlpatterns = [
     path('check/<slug:slug>/', views.check, name='check'),
     path('track/<slug:slug>/', views.track, name='track'),
     path('trail/<slug:slug>/', views.trail, name='trail'),
+    path('mapping/<slug:slug>/', views.mapping, name='mapping'),
     # path('test', views.test, name='test'),
 ]

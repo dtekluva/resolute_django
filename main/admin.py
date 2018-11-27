@@ -10,6 +10,7 @@ class HerdsmanAdmin(admin.ModelAdmin):
     list_display = ('name','slug', 'address', 'date', )
 
 class LocationAdmin(admin.ModelAdmin):
+    ordering = ('-date',)
     list_display = ('herdsman', 'date', 'address', 'speed',)
 
 class FarmlandAdmin(admin.ModelAdmin):

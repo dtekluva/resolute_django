@@ -7,6 +7,7 @@ var position = [6.6577124, 6.3185216];
 var x = 0;
 var lineCoordinates = [];
 var addresses = [];
+var latlng;
 const slug = document.getElementById("slug").value;
 console.log(slug);
 
@@ -15,9 +16,9 @@ console.log(slug);
  promise.done(function(res) {
     result = res
     pos = [result[result.length - 1].fields.lat,  result[result.length - 1].fields.lng]
-    var latlng = new google.maps.LatLng(pos[0],pos[1]);
+    latlng = new google.maps.LatLng(pos[0],pos[1]);
     let myOptions = {
-        zoom: 19,
+        zoom: 20,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -26,7 +27,7 @@ console.log(slug);
  
            }).then( (result)=>{
             prepareLinePath(result);
-            create_trail(lineCoordinates);
+            create_trail(lineCoordinates, latlng);
            }).then(()=>{
             
  
@@ -36,14 +37,14 @@ console.log(slug);
 
 var prepareLinePath = ((result)=>{
     result.forEach((element)=>{
-        if ( element.model == "main.location") {
+        if ( element.model == "main.location" && element.fields.lat != 0 && element.fields.lng != 0) {
             lineCoordinates.push({"lat":element.fields.lat, "lng":element.fields.lng});
             addresses.push( element.fields.address);
         }
     })
 })
 
-var create_trail = ( (lineCoordinates)=>{
+var create_trail = ( (lineCoordinates, latlng)=>{
 
     var color = "#6610f2";
     console.log(lineCoordinates)
@@ -62,15 +63,21 @@ var create_trail = ( (lineCoordinates)=>{
                     path: Polyline,
                     strokeColor: color,
                     strokeOpacity: 1.0,
-                    strokeWeight: 3,
-                    geodesic: true,
-                    icons: [{
-                        icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
-                        offset: '100%'
-                    }]
+                    strokeWeight: 4,
+                    geodesic: true
+                    // icons: [{
+                    //     icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
+                    //     offset: '100%'
+                    // }]
                  });
                 
                 linePath.setMap(trail_map);
+            markers = new google.maps.Marker({
+                                    position: latlng,
+                                    map: trail_map,
+                                    animation: google.maps.Animation.DROP
+                                });
+                           
     }
 
 

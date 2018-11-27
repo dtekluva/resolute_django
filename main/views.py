@@ -8,20 +8,22 @@ from django.core import serializers
 import math
 import datetime
 from snippet import helpers
+from datetime import datetime, timezone
+import pytz
+
+
 # from rest_framework import serializers
 # Create your views here.
 
 host = 'http://localhost:8000/'
 
 def index(request):
-    locations = Location.objects.all().order_by('-date')
-    # result = serializers.serialize("json", locations )
+    locations = Location.objects.all().order_by('-id')
 
     return render(request, 'resolute/main/index.html', {'posts':locations})
 
 
 def detail_view(request):
-    # print(request.body)
     herdsman = Herdsman.objects.all()
 
     for man in herdsman:
@@ -31,7 +33,6 @@ def detail_view(request):
 
 def table(request):
     locations = Location.objects.all().order_by('-date')
-    # result = serializers.serialize("json", locations )
 
     return render(request, 'resolute/main/table.html', {'posts':locations})
 
@@ -39,39 +40,43 @@ def table(request):
 @csrf_exempt
 def locationpost(request):
 # Create your views here.
-    
+    tz = pytz.timezone('Africa/Lagos')
+    lagos = datetime.now(tz)
+    formatedDate = lagos.strftime("%Y-%m-%d %H:%M:%S")
+
     # print(request.body)
     if request.method == 'POST':    
-        try:
-            reqPOST = (json.loads(request.body))
-            raw_time = str(datetime.datetime.now())
-            cleaned_json_post = dict(reqPOST['resource'][0])
-            clean_time = raw_time[:18]
 
-            devid = cleaned_json_post["devid"] 
-            time  = cleaned_json_post["time"]
-            etype = cleaned_json_post["etype"]
-            engine = cleaned_json_post["engine"]
-            lat = cleaned_json_post["lat"]
-            lng = cleaned_json_post["lon"]
-            vbat = cleaned_json_post["vbat"]
-            speed = cleaned_json_post["speed"][0:5]
-            pint = cleaned_json_post["pInt"]
-            
+        reqPOST = (json.loads(request.body))
+        cleaned_json_post = dict(reqPOST['resource'][0])
+
+        devid = cleaned_json_post["devid"] 
+        time  = cleaned_json_post["time"]
+        etype = cleaned_json_post["etype"]
+        engine = cleaned_json_post["engine"]
+        lat = cleaned_json_post["lat"]
+        lng = cleaned_json_post["lon"]
+        vbat = cleaned_json_post["vbat"]
+        speed = cleaned_json_post["speed"][0:5]
+        pint = cleaned_json_post["pInt"]
+        # try:        
         # if lat != '0' and lng != '0' :
-            address = helpers.get_address(lat,lng)
-            print(address)
-            herdsman = Herdsman.objects.get(userid = devid)
-            herdsman.lng = lng
-            herdsman.lat = lat
-            herdsman.address = address
-            herdsman.save()
-            new_location = Location(herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address)
-            new_location.save()
-            print(devid,time, etype, engine, lat, lng, vbat, speed)
-    
-        except:
-            return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
+        clean_address = helpers.get_address(lat,lng)
+        address = clean_address['address']
+        state = clean_address['state']
+        herdsman = Herdsman.objects.get(userid = devid)
+        herdsman.lng = lng
+        herdsman.lat = lat
+        herdsman.state = state
+        print(state)
+        herdsman.address = address
+        herdsman.save()
+        new_location = Location(state = state, herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address, date = formatedDate)
+        new_location.save()
+        print(devid,time, etype, engine, lat, lng, vbat, speed)
+
+    # except:
+        return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
     
 
     locations = Location.objects.all() # for iteration
@@ -119,6 +124,10 @@ def track(request, slug):
 
     return render(request, 'resolute/realtracking.html', {"slug":slug})
 
+def mapping(request, slug):
+    herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer 
+    return render(request, 'resolute/main/map.html', {"herdsman":herdsman, 'slug':slug})
+
 def trail(request, slug):
 
     return render(request, 'resolute/trail.html', {"slug":slug})
@@ -138,3 +147,4 @@ def check_distance(old_coord, new_coord):
     
     else:
         return False
+

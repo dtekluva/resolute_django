@@ -112,6 +112,7 @@
           <table id="example" class="table table-bordered table-hover table-display nowrap margin-top-10 w-p100 ">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Hersdman</th>
               <th>State</th>
               <th>Location</th>
@@ -155,8 +156,9 @@
             </tr> -->
             {% for post in posts %}
             <tr>
-               <td>{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</td>
-              <td>Nassarawa</td>
+              <td>{{post.id}}</td>
+               <td><a href="mapping/{{post.herdsman.slug}}">{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</a></td>
+              <td><a href="mapping/{{post.herdsman.slug}}">{{post.state}}</a></td>
               <td>Lat : {{post.lat}},Lng : {{post.lng}}</td>
               <td>{{post.speed}}</td>
               <td>{{post.date}}</td>
@@ -175,5 +177,6 @@
 	</section>
     <!-- /.content -->
   </div>
+
   <!-- /.content-wrapper -->
   {% endblock %}
