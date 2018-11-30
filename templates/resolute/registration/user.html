@@ -1,0 +1,158 @@
+{% extends "resolute/main/base.html" %} {% load static %} {% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>User Management</h1>
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="#"><i class="fa fa-dashboard"></i> Home</a>
+			</li>
+			<li class="breadcrumb-item"><a href="#">Users</a></li>
+			<li class="breadcrumb-item active">User Management</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<!-- Basic Forms -->
+		<div class="box">
+			<div class="box-header with-border">
+				<h6 class="box-subtitle">
+					Add new user to Admin dashboard access
+					<a href="http://reactiveraven.github.io/jqBootstrapValidation/"> </a>
+				</h6>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<div class="row">
+					<div class="col">
+						<form novalidate>
+							<div class="form-group">
+								<h5>First Name <span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="text"
+										name="text"
+										class="form-control"
+										required
+										data-validation-required-message="This field is required"
+									/>
+								</div>
+								<!-- <div class="form-control-feedback">
+									<small>Add <code>required</code> attribute to field for required validation.</small>
+								</div> -->
+							</div>
+							<div class="form-group">
+								<h5>Last Name<span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="text"
+										name="text"
+										class="form-control"
+										required
+										data-validation-required-message="This field is required"
+									/>
+								</div>
+								<!-- <div class="form-control-feedback">
+									<small>Add <code>required</code> attribute to field for required validation.</small>
+								</div> -->
+							</div>
+							<div class="form-group">
+								<h5>Email Field <span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="email"
+										name="email"
+										class="form-control"
+										required
+										data-validation-required-message="This field is required"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<h5>Password Input Field <span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="password"
+										name="password"
+										class="form-control"
+										required
+										data-validation-required-message="This field is required"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<h5>Repeat Password Input Field <span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="password"
+										name="password2"
+										data-validation-match-match="password"
+										class="form-control"
+										required
+									/>
+								</div>
+							</div>
+							<div class="text-xs-right"><button type="submit" class="btn btn-info">Submit</button></div>
+						</form>
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.box-body -->
+		</div>
+		<!-- /.box -->
+		<div class="row">			
+			
+			
+			<!-- /.col -->				
+			<div class="col-12 col-lg-12">
+				
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Registered Users</h3>
+              <h6 class="box-subtitle"></h6>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="example" class="table table-bordered table-hover table-display nowrap margin-top-10 w-p100 ">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>First name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                {% for post in posts %}
+                <tr>
+                  <td>{{post.id}}</td>
+                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</a></td>
+                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.state}}</a></td>
+                  <td>Lat : {{post.lat}},Lng : {{post.lng}}</td>
+                  <td>{{post.speed}}</td>
+                  <td>300</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            </div>
+            </div>
+          </div>
+      </div>
+			<!-- /.col -->
+		</div>
+	</section>
+	<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+
+{% endblock %}

@@ -10,6 +10,7 @@ import datetime
 from snippet import helpers
 from datetime import datetime, timezone
 import pytz
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 # from rest_framework import serializers
@@ -17,6 +18,7 @@ import pytz
 
 host = 'http://localhost:8000/'
 
+@login_required
 def index(request):
     locations = Location.objects.all().order_by('-id')
     page = 'index'
@@ -29,7 +31,7 @@ def detail_view(request):
 
     return render(request, 'resolute/skin-compact.html', {"herdsman":herdsman})
 
-
+@login_required
 def table(request):
 
     locations = Location.objects.all().order_by('-date')
@@ -59,24 +61,24 @@ def locationpost(request):
         vbat = cleaned_json_post["vbat"]
         speed = cleaned_json_post["speed"][0:5]
         pint = cleaned_json_post["pInt"]
-        # try:        
-        # if lat != '0' and lng != '0' :
-        clean_address = helpers.get_address(lat,lng)
-        address = clean_address['address']
-        state = clean_address['state']
-        herdsman = Herdsman.objects.get(userid = devid)
-        herdsman.lng = lng
-        herdsman.lat = lat
-        herdsman.state = state
-        print(state)
-        herdsman.address = address
-        herdsman.save()
-        new_location = Location(state = state, herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address, date = formatedDate)
-        new_location.save()
-        print(devid,time, etype, engine, lat, lng, vbat, speed)
+        try:        
+            if lat != '0' and lng != '0' :
+                clean_address = helpers.get_address(lat,lng)
+                address = clean_address['address']
+                state = clean_address['state']
+                herdsman = Herdsman.objects.get(userid = devid)
+                herdsman.lng = lng
+                herdsman.lat = lat
+                herdsman.state = state
+                print(state)
+                herdsman.address = address
+                herdsman.save()
+                new_location = Location(state = state, herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address, date = formatedDate)
+                new_location.save()
+                print(devid,time, etype, engine, lat, lng, vbat, speed)
 
-    # except:
-        return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
+        except:
+            return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
     
 
     locations = Location.objects.all() # for iteration
@@ -119,11 +121,12 @@ def check(request, slug):
     return HttpResponse(locations)
 
 
-
+@login_required
 def track(request, slug):
 
     return render(request, 'resolute/realtracking.html', {"slug":slug})
 
+@login_required
 def mapping(request, slug):
 
     herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer 
@@ -131,6 +134,7 @@ def mapping(request, slug):
     
     return render(request, 'resolute/main/map.html', {"herdsman":herdsman, 'slug':slug,  'page': page})
 
+@login_required
 def trail(request, slug):
 
     return render(request, 'resolute/trail.html', {"slug":slug})

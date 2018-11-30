@@ -81,15 +81,15 @@
             <ul class="dropdown-menu scale-up">
               <!-- User image -->
               <li class="user-header">
-                <img src="{% static "/images/user2-280x160.jpg" %}" class="img-fluid" alt="User Image">
+                {% comment %} <img src="{% static "/images/user2-280x160.jpg" %}" class="img-fluid" alt="User Image"> {% endcomment %}
               </li>
               <!-- Menu Body -->
               <li class="user-body">
                 <div class="row no-gutters">
                   <div class="col-12 text-left">
-                    <a href="#"><i class="ion ion-person"></i> My Profile</a>
+                    <a href="#"><i class="ion ion-person"></i>Welcome  {{user.first_name | title}}</a>
                   </div>
-                  <div class="col-12 text-left">
+                  {% comment %} <div class="col-12 text-left">
                     <a href="#"><i class="ion ion-email-unread"></i> Inbox</a>
                   </div>
                   <div class="col-12 text-left">
@@ -98,7 +98,7 @@
 				<div role="separator" class="divider col-12"></div>
 				  <div class="col-12 text-left">
                     <a href="#"><i class="ti-settings"></i> Account Setting</a>
-                  </div>
+                  </div> {% endcomment %}
 				<div role="separator" class="divider col-12"></div>
 				  <div class="col-12 text-left">
                     <a href="login.html"><i class="fa fa-power-off"></i> Logout</a>
@@ -143,8 +143,13 @@
             <i class="fa fa-map"></i> <span>Map</span>
           </a>
         </li>
+       
+        <li class="{% if page == 'user' %}active {% endif %}">
+          <a href="/auth/user">
+            <i class="fa fa-user"></i> <span>Users</span>
+          </a>
+        </li>
 		
-        </li>        
         
       </ul>
     </section>
@@ -153,7 +158,7 @@
 		<!-- item-->
 		
 		<!-- item-->
-		<a href="login.html" class="link" data-toggle="tooltip" title="Logout" data-original-title="Logout"><i class="fa fa-power-off"></i></a>
+		<a href="/auth/logout" class="link" data-toggle="tooltip" title="Logout" data-original-title="Logout"><i class="fa fa-power-off"></i></a>
 	</div>
   </aside>
 
@@ -220,19 +225,24 @@
   
   <!-- Qixa Admin for Data Table -->
   <script src="{% static "js/pages/data-table.js" %}"></script>
-  <!-- <script>
-      var table = $('#example').DataTable( {
-        ajax: "data.json"
-        } );
-        
-        setInterval( function () {
-            table.ajax.reload();
-        }, 30000 );
-      </script> -->
+
+  <script src="{% static "assets/vendor_components/jquery-3.3.1/jquery-3.3.1.min.js" %}"></script>
+	
+	
+
+	
+	<!-- Form validator JavaScript -->
+    <script src="{% static "js/pages/validation.js" %}"></script>
+    <script>
+    ! function(window, document, $) {
+        "use strict";
+			$("input,select,textarea").not("[type=submit]").jqBootstrapValidation();
+		}(window, document, jQuery);
+    </script>
+
 
 
       <!-- google maps api -->
-      <!-- <script src="http://maps.google.com/maps/api/js?sensor=true"></script> -->
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvvVEqrwQt8LmAzlB99zmrwWR3vxPDs8w"></script>
       <script src="{%  static "jquery-activmap/js/script.js" %}"></script> 
 

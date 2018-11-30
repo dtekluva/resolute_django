@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,24 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../images/favicon.ico">
+    <link rel="icon" href="{% static "images/favicon.ico" %}">
 
-    <title>Resolute 4.0 Admin - Dashboard</title>
+    <title>Resolute 4.0 Admin - LOGIN</title>
     
 	<!-- Bootstrap 4.0-->
-	<link rel="stylesheet" href="../assets/vendor_components/bootstrap/dist/css/bootstrap.css">
-	
+	<link rel="stylesheet" href="{% static "assets/vendor_components/bootstrap/dist/css/bootstrap.css" %}">
+
 	<!-- Bootstrap extend-->
-	<link rel="stylesheet" href="css/bootstrap-extend.css">
+	<link rel="stylesheet" href="{%  static "css/bootstrap-extend.css" %}">
 	
 	<!-- theme style -->
-	<link rel="stylesheet" href="css/master_style.css">
+	<link rel="stylesheet" href="{%  static "css/master_style.css" %}">
 	
 	<!-- Qixa Admin skins -->
-	<link rel="stylesheet" href="css/skins/_all-skins.css">	
+	<link rel="stylesheet" href="{%  static "css/skins/_all-skins.css" %}">	
 	  
     <!-- morris CSS -->	
-	<link rel="stylesheet" href="../assets/vendor_components/morris.js/morris.css">
+	<link rel="stylesheet" href="{%  static "assets/vendor_components/morris.js/morris.css" %}">
 
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -37,26 +38,31 @@
 <body class="hold-transition login-page">
 	
 	<div class="container h-p100">
-		<div class="row align-items-center justify-content-md-center h-p100">
+		<div class="row align-items-center justify-content-md-center h-p100" style="background-image:url({% static "images/gallery/landscape6.jpg" %}");" data-overlay="5">
 			<div class="col-lg-4 col-md-8 col-12">
-				<div class="login-box bg-img rounded" style="background-image:url(images/gallery/landscape6.jpg);" data-overlay="5">
+				<div class="login-box bg-img rounded" style="background-image:url(../images/gallery/landscape6.jpg);" data-overlay="5">
 				  <div class="login-box-body">
 					 <a href="index.html" class="logo">
       <!-- mini logo -->
 	  <b class="logo-mini">
-		  <span class="light-logo"><img src="images/logo.png" alt="logo"></span>
+		  <span class="light-logo"><img src="{% static "images/logo.png"%}" alt="logo""></span>
 	  </b>
     
     </a>
 					<p class="login-box-msg">Sign in</p>
 
-					<form action="index.html" method="post" class="form-element text-white">
+					<form action="/auth/login" method="post" class="form-element text-white">
+					{% csrf_token %}
+					{% comment %} {% for field in form %}
+					{{field}}
+
+					{% endfor %} {% endcomment %}
 					  <div class="form-group has-feedback">
-						<input type="email" class="form-control text-white" placeholder="Email" value="Email">
+						<input name= "email" type="email" class="form-control text-white" placeholder="Email" id = "id_email" value="">
 						<span class="ion ion-email form-control-feedback text-white"></span>
 					  </div>
 					  <div class="form-group has-feedback">
-						<input type="password" class="form-control text-white" placeholder="Password" value="Password">
+						<input name = "password" type="password" id = "id_password" class="form-control text-white" placeholder="Password" value="">
 						<span class="ion ion-locked form-control-feedback text-white"></span>
 					  </div>
 					  <div class="row">
@@ -93,13 +99,13 @@
 
 
 	<!-- jQuery 3 -->
-	<script src="../assets/vendor_components/jquery-3.3.1/jquery-3.3.1.min.js"></script>
+	<script src="{%  static "assets/vendor_components/jquery-3.3.1/jquery-3.3.1.min.js" %}"></script>
 	
 	<!-- popper -->
-	<script src="../assets/vendor_components/popper/dist/popper.min.js"></script>
-	
+	<script src="{%  static "assets/vendor_components/popper/dist/popper.min.js" %}"></script>
+
 	<!-- Bootstrap 4.0-->
-	<script src="../assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="{%  static "assets/vendor_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
 
 </body>
 </html>
