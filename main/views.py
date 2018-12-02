@@ -82,10 +82,10 @@ def locationpost(request):
     
 
     locations = Location.objects.all() # for iteration
-    result = serializers.serialize("json", locations )
+    # result = serializers.serialize("json", locations )
 
 
-    return HttpResponse(json.dumps({herdsman.name : result}))
+    return HttpResponse(json.dumps({'Success' : 'success'}))
     
 # @csrf_exempt
 # def end(request):
