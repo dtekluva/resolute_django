@@ -21,6 +21,9 @@
 	<!-- theme style -->
 	<link rel="stylesheet" href="{% static "css/master_style.css" %}">
 	
+  <!--alerts CSS -->
+  <link href= "{% static "assets/vendor_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css"  %}">
+
 	<!-- Qixa Admin skins -->
 	<link rel="stylesheet" href="{% static "css/skins/_all-skins.css" %}">	
 	  
@@ -227,12 +230,16 @@
   <script src="{% static "js/pages/data-table.js" %}"></script>
 
   <script src="{% static "assets/vendor_components/jquery-3.3.1/jquery-3.3.1.min.js" %}"></script>
-	
-	
+    
+  <!-- Sweet-Alert  -->
+  <script src= "{% static "assets/vendor_components/sweetalert/sweetalert.min.js"  %}"></script>
+  <script src="{% static "assets/vendor_components/sweetalert/jquery.sweet-alert.custom.js"  %}"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 	
 	<!-- Form validator JavaScript -->
     <script src="{% static "js/pages/validation.js" %}"></script>
+    <script src="{% static "js/forms.js" %}"></script>
     <script>
     ! function(window, document, $) {
         "use strict";
@@ -248,6 +255,6 @@
 
       <!-- <script src="{% static "/assets/vendor_components/gmaps/gmaps.min.js" %}"></script>
       <script src="{% static "/assets/vendor_components/gmaps/jquery.gmaps.js" %}"></script> -->
-	
+      
 </body>
 </html>

@@ -1,4 +1,6 @@
-{% extends "resolute/main/base.html" %} {% load static %} {% block content %}
+{% extends "resolute/main/base.html" %} {% load static %} 
+
+{% block content %}
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -21,20 +23,24 @@
 			<div class="box-header with-border">
 				<h6 class="box-subtitle">
 					Add new user to Admin dashboard access
-					<a href="http://reactiveraven.github.io/jqBootstrapValidation/"> </a>
+					<a href="#"> </a>
 				</h6>
 			</div>
 			<!-- /.box-header -->
 			<div class="box-body">
 				<div class="row">
 					<div class="col">
-						<form novalidate>
+                    <form novalidate id="add_form" action="#"  method= "POST" enctype="multipart/form-data">
+                      <span id = "csrf"></span>
+					  {% csrf_token %}	
+					  					
 							<div class="form-group">
 								<h5>First Name <span class="text-danger">*</span></h5>
 								<div class="controls">
 									<input
 										type="text"
-										name="text"
+										name="first_name" 
+										id="first_name"
 										class="form-control"
 										required
 										data-validation-required-message="This field is required"
@@ -49,7 +55,8 @@
 								<div class="controls">
 									<input
 										type="text"
-										name="text"
+										name="last_name" 
+										id="last_name"
 										class="form-control"
 										required
 										data-validation-required-message="This field is required"
@@ -64,7 +71,8 @@
 								<div class="controls">
 									<input
 										type="email"
-										name="email"
+										name="email" 
+										id="email"
 										class="form-control"
 										required
 										data-validation-required-message="This field is required"
@@ -72,11 +80,12 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<h5>Password Input Field <span class="text-danger">*</span></h5>
+								<h5>Phone <span class="text-danger">*</span></h5>
 								<div class="controls">
 									<input
-										type="password"
-										name="password"
+										type="phone"
+										name="phone" 
+										id="phone"
 										class="form-control"
 										required
 										data-validation-required-message="This field is required"
@@ -84,11 +93,49 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<h5>Repeat Password Input Field <span class="text-danger">*</span></h5>
+								<h5>Agency <span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="text"
+										name="agency" 
+										id="agency"
+										class="form-control"
+										required
+										data-validation-required-message="This field is required"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<h5>Address</h5>
+								<div class="controls">
+									<input
+										type="text"
+										name="address" 
+										id="address"
+										class="form-control"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<h5>Password Input  <span class="text-danger">*</span></h5>
 								<div class="controls">
 									<input
 										type="password"
-										name="password2"
+										name="password" 
+										id="password"
+										class="form-control"
+										required
+										data-validation-required-message="This field is required"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<h5>Repeat Password Input<span class="text-danger">*</span></h5>
+								<div class="controls">
+									<input
+										type="password"
+										name="password2" 
+										id="password2"
 										data-validation-match-match="password"
 										class="form-control"
 										required
@@ -127,18 +174,19 @@
                   <th>Last Name</th>
                   <th>Email</th>
                   <th>Phone</th>
+                  <th>Agency</th>
                 </tr>
               </thead>
               <tbody>
                 
-                {% for post in posts %}
+                {% for person in users %}
                 <tr>
-                  <td>{{post.id}}</td>
-                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</a></td>
-                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.state}}</a></td>
-                  <td>Lat : {{post.lat}},Lng : {{post.lng}}</td>
-                  <td>{{post.speed}}</td>
-                  <td>300</td>
+                  <td>{{person.id}}</td>
+                  <td><a href="#">{{person.first_name | title}}</a></td>
+                  <td><a href="#">{{person.last_name | title}}</a></td>
+                  <td>{{person.email}}</td>
+                  <td>{{person.useraccount.phone}}</td>
+                  <td>{{person.useraccount.agency}}</td>
                 </tr>
                 {% endfor %}
               </tbody>
