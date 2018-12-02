@@ -20,7 +20,7 @@ host = 'http://localhost:8000/'
 
 @login_required
 def index(request):
-    locations = Location.objects.all().order_by('-id')
+    locations = Location.objects.all().order_by('-id')[:10]
     page = 'index'
     return render(request, 'resolute/main/index.html', {'posts':locations, 'page': page})
 
