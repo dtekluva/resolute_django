@@ -114,7 +114,7 @@ function begin_trail_in_modal(id){
         }
 
 
-    });
+    }); 
 
 
 
