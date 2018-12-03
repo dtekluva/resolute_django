@@ -27,8 +27,16 @@ class Herdsman(models.Model):
     class Meta:
         ordering = ('slug',)
 
+
+class Collection(models.Model):
+    herdsman = models.ForeignKey('Herdsman', on_delete=models.CASCADE)
+    start = models.DateTimeField(default=datetime.now(), blank=True)
+    stop = models.DateTimeField(default=datetime.now(), blank=True)
+
+
 class Location(models.Model):
     herdsman        = models.ForeignKey('Herdsman', on_delete=models.CASCADE)
+    collection      = models.ForeignKey('Collection', on_delete=models.CASCADE, default = 1)
     lng             = models.FloatField(max_length=100,blank=True, default=0)
     lat             = models.FloatField(max_length=100,blank=True, default=0)
     speed           = models.FloatField(max_length=100,blank=True, default=0)
@@ -43,11 +51,12 @@ class Location(models.Model):
     class Meta:
         ordering = ('date',)
 
-    
+
 class Farmland(models.Model):
     owner_name = models.TextField(default=0)
     address    = models.TextField(default=0)
     phone      = models.IntegerField(unique=False, default = "00000000")
+
 
 class Bound(models.Model):
     farmland        = models.ForeignKey('Farmland', on_delete=models.CASCADE)
