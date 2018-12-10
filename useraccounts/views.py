@@ -3,9 +3,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from useraccounts.forms import LoginForm
 from django.contrib.auth.models import User
 from useraccounts.models import UserAccount
+from main.models import Farmland
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
 import json
 from snippet import helpers
+import ast
 
 # from main.views import index
 # Create your views here.
@@ -90,21 +93,71 @@ def create_user(request):
 
 
 
-    return render(request, 'store/add_tenant.html')
+#handle mobile auth and activity
+
+@csrf_exempt
+def mobile_register(request):
+
+    if request.method == 'POST':
+
+        exempted_fields = ["comunity", "full_name"]
+        print(json.loads(request.body))
+        cleaned_form = helpers.clean(json.loads(request.body), exempted_fields) #Load Response jason from Post and clean values remove trailing spaces
+        fname = cleaned_form['full_name']
+        phone = cleaned_form['phone']
+        print(cleaned_form)
+        community = cleaned_form['community']
+        pin = cleaned_form['pin']
+        username = phone
+
+        new_user = User(first_name = fname, username = username)
+
+        new_user.save()
+
+        new_farm = Farmland(  phone = phone, full_name = fname
+                                        , community = community, user_id = new_user.id)
+        new_farm.save()
+
+        new_user.set_password(pin + "????")
+        new_user.save()
 
 
+        return HttpResponse(json.dumps({"response":"success"}))
 
+    return HttpResponse(json.dumps({"response":"failed"}))
 
+@csrf_exempt
+def mobile_signin(request):
+    if request.method == 'POST':
+        # print(request.POST)
+        form = LoginForm(request.POST)
+  
+        if True:
 
+            phone = request.POST.get("phone", "")
+            password = request.POST.get("pin", "")
 
+            try:
+                #GET CORRESPONDING USERNAME FROM PHONE  NUMBER POSTED
+                username = User.objects.get(username = phone).username
+                print(username)
+                user = authenticate(username = username.lower(), password = password + "????")
 
+                user = User.objects.get(username=username)
+                if (user.username == username): #allows user to login using username
+                        # No backend authenticated the credentials
+       
+                        user = User.objects.get(username=username)
+                        login(request, user)
+                        return HttpResponse(json.dumps({"response":"success"}))
+            except:
+                return HttpResponse(json.dumps({"response":"failed"}))
 
-
-
-
-
-
-
+def test(request):
+    print(request.user)
+    if request.user.is_authenticated:
+        print('yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeees')
+    return HttpResponse(json.dumps({"response":"failed"}))
 
 
 # def forgotPasswordView(request):

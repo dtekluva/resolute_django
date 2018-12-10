@@ -18,7 +18,7 @@ window.onload = ()=>{
     // console.log(collections)
     var collections_array  = Array.from(collections);
     // console.log(x)
-    collections_array.forEach(element => {
+    collections_array.forEach(element => { 
         // console.log(element)
         element.addEventListener('click', (e)=>{
             modal[0].innerHTML = `Viewing ${(e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText)}, Currently in ${(e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText)} State`;

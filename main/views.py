@@ -1,15 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from main.models import Herdsman, Bound, Location, Farmland, Collection
-import json
+from main.models import Herdsman, Bounds, Location, Farmland, Collection
+import json, math, datetime, pytz, ast
 from itertools import chain #allow for merging multiple querysets frorm different models
 from django.core import serializers
-import math
-import datetime
 from snippet import helpers
 from datetime import datetime, timezone, timedelta
-import pytz
 from django.contrib.auth.decorators import login_required, permission_required
 from resolute import settings
 
@@ -22,8 +19,12 @@ host = 'http://localhost:8000/'
 @login_required
 def index(request):
     collections = Collection.objects.all().order_by('-id')[:10]
+    herdsmen = Herdsman.objects.all().count()
+    farmers = Farmland.objects.all().count()
+    states = Herdsman.objects.values_list('state', flat=True).count()
+    print(herdsmen, farmers, states)
     page = 'index'
-    return render(request, 'resolute/main/index.html', {'posts':collections, 'page': page})
+    return render(request, 'resolute/main/index.html', {'posts':collections, 'page': page, 'total_farmers': farmers, 'total_states': states, 'total_herdsmen':herdsmen})
 
 
 def detail_view(request):
@@ -170,6 +171,28 @@ def check_distance(old_coord, new_coord):
     
     else:
         return False
+
+
+
+@csrf_exempt
+def post_latlng(request):
+
+    if request.method == 'POST':
+        farmland = Farmland.objects.get(user = request.user)
+        bounds = ast.literal_eval(request.POST.get('data'))
+
+        for latlng in bounds:
+            new_bounds = Bounds(farmland = farmland.id, lat = latlng[0], latlng = [1]) 
+            new_bounds.save()
+
+
+def get_latlng(request, username):
+    bounds = Bounds.objects.all()
+    print(request.GET, username)
+    bounds = serializers.serialize("json", bounds)
+
+    return HttpResponse(bounds)
+
 
 # @csrf_exempt
 # def end(request):

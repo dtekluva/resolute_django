@@ -1,5 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
+from django.contrib.auth.models import User
 from datetime import date, datetime
 
 # Create your models here.
@@ -53,12 +54,16 @@ class Location(models.Model):
 
 
 class Farmland(models.Model):
-    owner_name = models.TextField(default=0)
-    address    = models.TextField(default=0)
-    phone      = models.IntegerField(unique=False, default = "00000000")
+    user       = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'farmland', null = True, blank = True, default = 1)
+    community  = models.TextField(default=0)
+    full_name  = models.CharField(max_length=50, null = True)
+    phone      = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return str(self.user.username)
 
 
-class Bound(models.Model):
+class Bounds(models.Model):
     farmland        = models.ForeignKey('Farmland', on_delete=models.CASCADE)
     lng             = models.FloatField(max_length=100,blank=True, default=0)
     lat             = models.FloatField(max_length=100,blank=True, default=0)
