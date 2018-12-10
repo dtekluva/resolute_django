@@ -32,12 +32,12 @@
               </h6>
               <br>
 			  <small>Total Registered</small>
-              <p class="font-size-26">450</p>
+              <p class="font-size-26">{{total_herdsmen}}</p>
 
               <div class="progress progress-xxs mt-0 mb-10">
                 <div class="progress-bar bg-success" role="progressbar" style="width: 35%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-              <div class="font-size-12"><i class="ion-arrow-graph-up-right text-success mr-1"></i> 18% of total herdsman</div>
+              <div class="font-size-12"></div>
             </div>
         </div>
         <!-- /.col -->
@@ -49,12 +49,12 @@
               </h6>
               <br>
 			  <small>Total Registered</small>
-              <p class="font-size-26">1,200</p>
+              <p class="font-size-26">{{total_farmers}}</p>
 
               <div class="progress progress-xxs mt-0 mb-10">
                 <div class="progress-bar bg-danger" role="progressbar" style="width: 75%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-              <div class="font-size-12"><i class="ion-arrow-graph-up-right text-success mr-1"></i> 22% of total farmers</div>
+              <div class="font-size-12"></div>
             </div>
         </div>
         <!-- /.col -->
@@ -66,12 +66,12 @@
               </h6>
               <br>
 			  <small>Present In Nigeria</small>
-              <p class="font-size-26">24</p>
+              <p class="font-size-26">{{total_states}}</p>
 
               <div class="progress progress-xxs mt-0 mb-10">
                 <div class="progress-bar bg-info" role="progressbar" style="width: 55%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-              <div class="font-size-12"><i class="ion-arrow-graph-down-right text-danger mr-1"></i> 12 More States to go</div>
+              <div class="font-size-12"></div>
             </div>
         </div>
         <!-- /.col -->
@@ -89,8 +89,7 @@
                 <div class="progress-bar bg-primary" role="progressbar" style="width: 52%; height: 4px;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
               <div class="flexbox font-size-12">
-                <span><i class="ion-arrow-graph-down-right text-success mr-1"></i>Measured as National Total </span>
-              </div>
+                <span></div>
             </div>
         </div>
         <!-- /.col -->		  
@@ -103,7 +102,7 @@
 				
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Most Recent Reports</h3>
+              <h3 class="box-title">Most Recent Trail Captures</h3>
               <h6 class="box-subtitle"></h6>
             </div>
             <!-- /.box-header -->
@@ -116,22 +115,22 @@
                   <th>Hersdman</th>
                   <th>State</th>
                   <th>Location</th>
-                  <th>Speed(KM/hr)</th>
-                  <th>Date</th>
-                  <th>Population</th>
+                  <th>Start TIme</th>
+                  <th>End Time</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 
                 {% for post in posts %}
                 <tr>
-                  <td>{{post.id}}</td>
-                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</a></td>
-                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.state}}</a></td>
-                  <td>Lat : {{post.lat}},Lng : {{post.lng}}</td>
-                  <td>{{post.speed}}</td>
-                  <td>{{post.date}}</td>
-                  <td>300</td>
+                  <td>{{post.id}} </td>
+                  <td><a href="mapping/{{post.herdsman.slug}}" >{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</a></td>
+                  <td><a href="mapping/{{post.herdsman.slug}}">{{post.herdsman.state}}</a></td>
+                  <td>Lat : {{post.herdsman.lat}},Lng : {{post.herdsman.lng}}</td>
+                  <td>{{post.start}}</td>
+                  <td>{{post.stop}}</td>
+                  <td><button id = "{{post.id}}" type="button" class="btn btn-default btn-sm collection_btn" data-toggle="modal" data-target="#modal-center">Launch Map</button></td>
                 </tr>
                 {% endfor %}
               </tbody>
@@ -141,6 +140,28 @@
           </div>
       </div>
 			<!-- /.col -->
+      				<div class="modal center-modal fade" id="modal-center" tabindex="-1">
+				  <div class="modal-dialog">
+					<div class="modal-content">
+					  <div class="modal-header">
+						<h5 class="modal-title">Modal title</h5>
+						<button type="button" class="close" data-dismiss="modal">
+						  <span aria-hidden="true">&times;</span>
+						</button>
+					  </div>
+					  <div class="modal-body">
+						<div class="box-body">
+            	<div id="activmap-canvas" class="gmaps"></div>
+            </div>
+					  </div>
+					  <div class="modal-footer modal-footer-uniform">
+						{% comment %} <button type="button" class="btn btn-bold btn-pure btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+						{% comment %} <button type="button" class="btn btn-bold btn-pure btn-primary float-right">Save changes</button> {% endcomment %}
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  <!-- /.modal -->
 		</div>
       
 	</section>

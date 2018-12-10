@@ -31,6 +31,7 @@ def clean(txt, exempt = "none"):
         new_dict[key] = ((txt[key]).strip())
         if key not in exempt:
             new_dict[key] = (new_dict[key]).replace(" ","").lower()
+
     return new_dict
 
 

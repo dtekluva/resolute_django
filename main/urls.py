@@ -24,8 +24,12 @@ urlpatterns = [
     path('table', views.table, name='table'),
     # path('track', views.track, name='track')
     path('check/<slug:slug>/', views.check, name='check'),
+    path('collection_check/<int:id>/', views.collection_check, name='collection_check'),
     path('track/<slug:slug>/', views.track, name='track'),
     path('trail/<slug:slug>/', views.trail, name='trail'),
     path('mapping/<slug:slug>/', views.mapping, name='mapping'),
+    path('get_latlng/<slug:username>/', views.get_latlng, name='get_latlng'),
+    path('post_latlng/<slug:username>/', views.post_latlng, name='post_latlng'),
+    
     # path('test', views.test, name='test'),
 ]
