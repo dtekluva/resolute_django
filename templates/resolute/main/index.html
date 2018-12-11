@@ -111,12 +111,14 @@
               <table id="example" class="table table-bordered table-hover table-display nowrap margin-top-10 w-p100 ">
               <thead>
                 <tr>
+                  <th>S/N</th>
                   <th>ID</th>
                   <th>Hersdman</th>
                   <th>State</th>
                   <th>Location</th>
-                  <th>Start TIme</th>
                   <th>End Time</th>
+                  <th>Start Time</th>
+                  <th>Population</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -125,11 +127,13 @@
                 {% for post in posts %}
                 <tr>
                   <td>{{post.id}} </td>
+                  <td>{{post.herdsman.db_id |upper}} </td>
                   <td><a href="mapping/{{post.herdsman.slug}}" >{{post.herdsman.surname | title}}, {{post.herdsman.name | title}}</a></td>
                   <td><a href="mapping/{{post.herdsman.slug}}">{{post.herdsman.state}}</a></td>
                   <td>Lat : {{post.herdsman.lat}},Lng : {{post.herdsman.lng}}</td>
                   <td>{{post.start}}</td>
                   <td>{{post.stop}}</td>
+                  <td>{{post.herdsman.no_of_cattle}}</td>
                   <td><button id = "{{post.id}}" type="button" class="btn btn-default btn-sm collection_btn" data-toggle="modal" data-target="#modal-center">Launch Map</button></td>
                 </tr>
                 {% endfor %}

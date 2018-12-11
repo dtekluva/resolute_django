@@ -17,9 +17,12 @@ class Herdsman(models.Model):
     last_post       = models.DateField(auto_now_add=True, blank=True)
     is_trespassing  = models.BooleanField(default = False)
     date            = models.DateField(auto_now_add=True)
+    db_id           = models.CharField(max_length=40, unique=True, null = True, blank=True)
+    no_of_cattle    = models.IntegerField(unique=False, default = "0")
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        self.db_id = 'hd{:03d}'.format(self.id)
         super(Herdsman, self).save(*args, **kwargs)
 
     def __str__(self):              # __unicode__ on Python 2
@@ -45,6 +48,7 @@ class Location(models.Model):
     address         = models.TextField(default=0)
     state           = models.TextField(default=0)
     date            = models.DateTimeField(default=datetime.now(), blank=True)
+    
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.lat) + str(self.lng)
@@ -59,9 +63,15 @@ class Farmland(models.Model):
     full_name  = models.CharField(max_length=50, null = True)
     phone      = models.CharField(max_length=20, unique=True)
     token       = models.CharField(max_length=60, null=True, blank = True)
+    db_id           = models.CharField(max_length=40,unique=True, null = True, blank=True )
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.user.username)
+    
+    def save(self, *args, **kwargs):
+        
+        self.db_id = 'hd{:03d}'.format(self.id)
+        super(Farmland, self).save(*args, **kwargs)
 
 
 class Bounds(models.Model):
