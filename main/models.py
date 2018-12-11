@@ -58,6 +58,7 @@ class Farmland(models.Model):
     community  = models.TextField(default=0)
     full_name  = models.CharField(max_length=50, null = True)
     phone      = models.CharField(max_length=20, unique=True)
+    token       = models.CharField(max_length=60, null=True, blank = True)
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.user.username)

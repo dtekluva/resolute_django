@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from main.models import Herdsman, Bounds, Location, Farmland, Collection
+from main.models import User, Herdsman, Bounds, Location, Farmland, Collection
 import json, math, datetime, pytz, ast
 from itertools import chain #allow for merging multiple querysets frorm different models
 from django.core import serializers
@@ -9,6 +9,7 @@ from snippet import helpers
 from datetime import datetime, timezone, timedelta
 from django.contrib.auth.decorators import login_required, permission_required
 from resolute import settings
+from useraccounts.models import Session
 
 
 # from rest_framework import serializers
@@ -95,7 +96,6 @@ def locationpost(request):
             last_collection.stop = new_location.date #COLLECTION STOP TIME
             last_collection.save()
 
-            # print(devid,time, etype, engine, lat, lng, vbat, speed)
 
     
         return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
@@ -172,46 +172,47 @@ def check_distance(old_coord, new_coord):
     else:
         return False
 
+def get_latlng(request, username):
 
+    user = User.objects.get(username = username)
+    farmland = Farmland.objects.get(user = user.id)
+    bounds = Bounds.objects.filter(farmland = farmland)
+    bounds_list = []
+
+    for location in bounds:
+
+        point = [location.lat, location.lng]
+        bounds_list.append(point)
+
+    response = {"data":bounds_list}
+
+    return HttpResponse(json.dumps(response))
+
+
+#HANDLE BOUNDS POST FROM MOBILE
 
 @csrf_exempt
 def post_latlng(request):
+    new_request = json.loads(request.body)
+    username = new_request['username']
+    auth_data = new_request['auth']
 
-    if request.method == 'POST':
-        farmland = Farmland.objects.get(user = request.user)
-        bounds = ast.literal_eval(request.POST.get('data'))
+    user = User.objects.get(username = username)
+    farmland = Farmland.objects.get(user = user.id)
+    session = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
-        for latlng in bounds:
-            new_bounds = Bounds(farmland = farmland.id, lat = latlng[0], latlng = [1]) 
-            new_bounds.save()
+    if session._authenticate(auth_data):
 
+        #REMOVE DATA FROM BOUNDS BEFORE ADDING NEW BOUNDS
+        bounds = Bounds.objects.filter(farmland = farmland)
+        for location in bounds:
+            location.delete()
 
-def get_latlng(request, username):
-    bounds = Bounds.objects.all()
-    print(request.GET, username)
-    bounds = serializers.serialize("json", bounds)
-
-    return HttpResponse(bounds)
-
-
-# @csrf_exempt
-# def end(request):
-
-    
-#     if request.method == 'GET':
-#         post = (request.GET)
-#         target = Customer.objects.get(id = post["device"])
-#         target.lng = post['ln']
-#         target.lat = post['lt']
-#         target.address  = helpers.get_address(post['lt'],post['ln'])
-#         target.is_panicking = True
-#         target.panicked = datetime.datetime.now()
-#         target.save()
-
-#         new_location = Location.objects.create(lat = target.lat, lng = target.lng, address = target.address, customer_id = target.id,
-#                                                 speed = post['sog'], accuracy = post['hdop'])
-
-#         return HttpResponse(json.dumps({'success':'success', "panic_status":target.is_panicking}))
-
+        #ADD NEW BOUNDS TO DATABASE
+        for latlng in new_request['data']:
+            new_bound = Bounds(farmland = farmland, lat = latlng[0], lng = latlng[1])
+            new_bound.save()
         
-#     return HttpResponse('Unrecognisable request method, cannot understand')
+        return HttpResponse(json.dumps({"response":"success", "data": "Added bound to {}".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
+    else:
+        return HttpResponse(json.dumps({"response":"failed", 'code':['401','unauthorized request, (Bad token)'] })) 
