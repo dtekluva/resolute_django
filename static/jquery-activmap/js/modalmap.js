@@ -21,7 +21,7 @@ window.onload = ()=>{
     collections_array.forEach(element => { 
         // console.log(element)
         element.addEventListener('click', (e)=>{
-            modal[0].innerHTML = `Viewing ${(e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText)}, Currently in ${(e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText)} State`;
+            modal[0].innerHTML = `Viewing ${(e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText)}, Currently in ${(e.target.parentElement.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling.innerText)} State`;
             begin_trail_in_modal(e.target.id)
         })
     });

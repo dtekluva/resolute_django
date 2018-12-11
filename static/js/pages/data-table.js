@@ -6,14 +6,17 @@
 $(function () {
     "use strict";
 
-    $('#example1').DataTable();
+    $('#example1').DataTable({
+			"order": [[ 0, "desc" ]]
+		});
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
       'searching'   : false,
       'ordering'    : true,
       'info'        : true,
-      'autoWidth'   : false
+			'autoWidth'   : false,
+			"order": [[ 0, "desc" ]]
     });
 	
 	
@@ -21,7 +24,8 @@ $(function () {
 		dom: 'Bfrtip',
 		buttons: [
 			'copy', 'csv', 'excel', 'pdf', 'print'
-		]
+		],
+		"order": [[ 0, "desc" ]]
 	} );
 	
 	$('#tickets').DataTable({
