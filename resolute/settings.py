@@ -30,9 +30,10 @@ SECRET_KEY = '&$8+-3!@-$7fndligjg19+@7b*^#l0is5#7k5l4=87uuc3cn4j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.43.118',
-                'localhost',
-                'resolute40.pythonanywhere.com']
+ALLOWED_HOSTS = [   '192.168.43.118',
+                    '192.168.43.96',
+                    'localhost',
+                    'resolute40.pythonanywhere.com']
 
 
 # Application definition
