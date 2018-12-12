@@ -5,7 +5,7 @@ var host = window.location.hostname == 'localhost'
 
 var position = [6.6577124, 6.3185216];
 var x = 0;
-var lineCoordinates = [];
+// var lineCoordinates = [];
 var addresses = [];
 var latlng;
 
@@ -39,6 +39,7 @@ window.onload = ()=>{
 
 
 function begin_trail_in_modal(id){
+    var lineCoordinates = [];
     // const slug = document.getElementById("slug").value;
     const slug = id; //PLEASE NOTE THAT ID IS BEING USED IN PLACE OF SLUG EVEN THOUGH THE NAME IS LEF AS SLUG .
     console.log(slug);

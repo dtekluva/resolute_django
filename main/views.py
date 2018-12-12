@@ -70,15 +70,18 @@ def locationpost(request):
             clean_address = helpers.get_address(lat,lng)
             address = clean_address['address']
             state = clean_address['state']
+            try:
+                #GET CORRESPONDING HERDSMAN OBJECT
+                herdsman = Herdsman.objects.get(userid = devid)
+                herdsman.lng = lng
+                herdsman.lat = lat
+                herdsman.state = state
+                # print(state)
+                herdsman.address = address
+                herdsman.save()
 
-            #GET CORRESPONDING HERDSMAN OBJECT
-            herdsman = Herdsman.objects.get(userid = devid)
-            herdsman.lng = lng
-            herdsman.lat = lat
-            herdsman.state = state
-            # print(state)
-            herdsman.address = address
-            herdsman.save()
+            except:
+                return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))
 
 
             if post_is_too_old(lagos): #CHECK IF INTERVAL NOT EXCEEDED
@@ -98,7 +101,7 @@ def locationpost(request):
 
 
     
-        return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))   
+            return HttpResponse(json.dumps('Added post to device id {} '.format(devid)))   
     
 
     locations = Location.objects.all() # for iteration
