@@ -48,9 +48,8 @@ class Session(models.Model):
         self.save()
     
     def _authenticate(self, auth_data):
-        print(self.token, auth_data['session_token'], self.user.token, auth_data['client_token'])
         
-        if self.token == auth_data['session_token'] and self.user.token == auth_data['client_token']:
+        if self.token == auth_data['session_token']:
                 return True
         return False
 

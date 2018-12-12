@@ -197,22 +197,23 @@ def post_latlng(request):
     username = new_request['username']
     auth_data = new_request['auth']
 
-    user = User.objects.get(username = username)
-    farmland = Farmland.objects.get(user = user.id)
-    session = Session.objects.get(token = auth_data['session_token'], is_active = True)
+    try:
+        user = User.objects.get(username = username)
+        farmland = Farmland.objects.get(user = user.id)
+        session = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
-    if session._authenticate(auth_data):
+        if session._authenticate(auth_data):
 
-        #REMOVE DATA FROM BOUNDS BEFORE ADDING NEW BOUNDS
-        bounds = Bounds.objects.filter(farmland = farmland)
-        for location in bounds:
-            location.delete()
+            #REMOVE DATA FROM BOUNDS BEFORE ADDING NEW BOUNDS
+            bounds = Bounds.objects.filter(farmland = farmland)
+            for location in bounds:
+                location.delete()
 
-        #ADD NEW BOUNDS TO DATABASE
-        for latlng in new_request['data']:
-            new_bound = Bounds(farmland = farmland, lat = latlng[0], lng = latlng[1])
-            new_bound.save()
-        
-        return HttpResponse(json.dumps({"response":"success", "data": "Added bound to {}".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
-    else:
-        return HttpResponse(json.dumps({"response":"failed", 'code':['401','unauthorized request, (Bad token)'] })) 
+            #ADD NEW BOUNDS TO DATABASE
+            for latlng in new_request['data']:
+                new_bound = Bounds(farmland = farmland, lat = latlng[0], lng = latlng[1])
+                new_bound.save()
+            
+            return HttpResponse(json.dumps({"response":"success", "message": "Added bound to {}".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
+    except:
+        return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 

@@ -92,6 +92,7 @@ def create_user(request):
 @csrf_exempt
 def mobile_register(request):
 
+
     if request.method == 'POST':
 
         exempted_fields = ["comunity", "full_name"]
@@ -104,6 +105,9 @@ def mobile_register(request):
         community = cleaned_form['community']
         pin = cleaned_form['pin']
         username = phone
+
+        if User.objects.filter(username = username).count() > 0:
+                return HttpResponse(json.dumps({"response":"failed", 'code': '400', 'message':'Phone number exists'}))
 
         new_user = User(first_name = fname, username = username)
 
@@ -131,11 +135,17 @@ def mobile_register(request):
 def mobile_signin(request):
 
         if request.method == 'POST':
-                post = json.loads(request.body)
 
-                phone = post['phone']
-                password = post['pin']
-                client_token = post['client_token']
+                try:
+                        post = json.loads(request.body)
+                        phone = post['phone']
+                        password = post['pin']
+                except:
+                        return HttpResponse(json.dumps({"response":"failed", 'code':['400','Invalid Json Payload'] }))
+ 
+
+                #NOTE THAT CLIENT TOKEN IS NO LONGER REQUIRED BUT JUST THERE TO BE REMOVED AT A LATER TIME
+                client_token = None
 
                 #GET CORRESPONDING USERNAME FROM PHONE  NUMBER POSTED
                 try:
@@ -151,8 +161,8 @@ def mobile_signin(request):
                         user = User.objects.get(username=username)
                         farmland = Farmland.objects.get(user__id = user.id)
                         
-                        if not _authenticate(farmland, client_token):
-                                return HttpResponse(json.dumps({"response":"failed", 'code':['401','unauthorized request, (Bad token)'] })) 
+                        # if not _authenticate(farmland, client_token):
+                        #         return HttpResponse(json.dumps({"response":"failed", 'code':['401','unauthorized request, (Bad token)'] })) 
 
                         try:
                                 existing_session = Session.objects.get(user__id = farmland.id, is_active = True)
@@ -166,7 +176,7 @@ def mobile_signin(request):
                                 new_session = Session.objects.create(user = farmland)
                                 new_session.save()
                                 
-                                return HttpResponse(json.dumps({"response":"success",  'auth_keys': {'session_token': new_session.token}}))
+                                return HttpResponse(json.dumps({"response":"success",  'auth_keys': {'session_token': new_session.token, 'client_token': farmland.token}}))
 
         return HttpResponse(json.dumps({"response":"failed", 'code':['400','Bad request'] }))
 
