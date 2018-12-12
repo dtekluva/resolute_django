@@ -139,7 +139,7 @@ def mobile_signin(request):
                 try:
                         post = json.loads(request.body)
                         phone = post['phone']
-                        password = post['pin']
+                        password = post['pin'] + "????"
                 except:
                         return HttpResponse(json.dumps({"response":"failed", 'code':['400','Invalid Json Payload'] }))
  
@@ -150,11 +150,15 @@ def mobile_signin(request):
                 #GET CORRESPONDING USERNAME FROM PHONE  NUMBER POSTED
                 try:
                         username = User.objects.get(username = phone).username
-                        user = authenticate(username = username.lower(), password = password + "????")
+                        user = authenticate(username = username.lower(), password = password)
                         user = User.objects.get(username=username)
+                        logged_user = User.objects.get(username=phone)
+                        
+                        if logged_user.check_password(password) != True:
+                                raise Exception('err')
                         
                 except:
-                        return HttpResponse(json.dumps({"response":"failed", 'code':['400','Invalid Auth Data'] }))
+                        return HttpResponse(json.dumps({"response":"failed", 'code':'400', 'message':'Invalid Auth Data' }))
 
                 if user.username == username: #allows user to login using username
 
@@ -167,7 +171,6 @@ def mobile_signin(request):
                         try:
                                 existing_session = Session.objects.get(user__id = farmland.id, is_active = True)
                                 existing_session.disable()
-                                # existing_session.save()
                         
                         except:
                                 pass

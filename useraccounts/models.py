@@ -42,6 +42,7 @@ class Session(models.Model):
             return True
         else: 
             return False
+            
     def disable(self):
 
         self.is_active = False
