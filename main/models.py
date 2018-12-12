@@ -22,6 +22,7 @@ class Herdsman(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
+        super(Herdsman, self).save(*args, **kwargs)
         self.db_id = 'hd{:03d}'.format(self.id)
         super(Herdsman, self).save(*args, **kwargs)
 
@@ -70,6 +71,7 @@ class Farmland(models.Model):
     
     def save(self, *args, **kwargs):
         
+        super(Farmland, self).save(*args, **kwargs)
         self.db_id = 'hd{:03d}'.format(self.id)
         super(Farmland, self).save(*args, **kwargs)
 
