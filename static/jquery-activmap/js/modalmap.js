@@ -50,6 +50,7 @@ function begin_trail_in_modal(id){
         result = res
         pos = [result[result.length - 1].fields.lat,  result[result.length - 1].fields.lng]
         latlng = new google.maps.LatLng(pos[0],pos[1]);
+        // console.log(pos);
         let myOptions = {
             zoom: 20,
             center: latlng,
@@ -80,6 +81,12 @@ function begin_trail_in_modal(id){
 
     var create_trail = ( (lineCoordinates, latlng)=>{
 
+        markers = new google.maps.Marker({
+            position: latlng,
+            map: trail_map,
+            animation: google.maps.Animation.DROP
+        });
+        
         var color = "#6610f2";
         console.log(lineCoordinates)
         for (let index = 0; index < lineCoordinates.length-1; index++) {
@@ -106,13 +113,7 @@ function begin_trail_in_modal(id){
                     });
                     
                     linePath.setMap(null);
-                    linePath.setMap(trail_map);
-                markers = new google.maps.Marker({
-                                        position: latlng,
-                                        map: trail_map,
-                                        animation: google.maps.Animation.DROP
-                                    });
-                            
+                    linePath.setMap(trail_map);                            
         }
 
 
