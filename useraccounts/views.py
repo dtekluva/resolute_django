@@ -48,7 +48,7 @@ def loginView(request):
 
 def user(request):
     page = 'user'
-    users =  User.objects.all()
+    users =  User.objects.filter(is_staff = True)
     person = User.objects.get(id = 1)
     print(person.useraccount.phone)
     print(users)
@@ -144,7 +144,7 @@ def mobile_signin(request):
                         return HttpResponse(json.dumps({"response":"failed", 'code':['400','Invalid Json Payload'] }))
  
 
-                #NOTE THAT CLIENT TOKEN IS NO LONGER REQUIRED BUT JUST THERE TO BE REMOVED AT A LATER TIME
+                #NOTE THAT CLIENT TOKEN IS NO LONGER REQUIRED BUT JUST THERE, TO BE REMOVED AT A LATER TIME
                 client_token = None
 
                 #GET CORRESPONDING USERNAME FROM PHONE  NUMBER POSTED

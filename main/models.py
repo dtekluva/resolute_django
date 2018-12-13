@@ -34,6 +34,7 @@ class Herdsman(models.Model):
 
     class Meta:
         ordering = ('slug',)
+        verbose_name_plural = "Herdsmen"
 
 
 class Collection(models.Model):
@@ -72,16 +73,15 @@ class Farmland(models.Model):
     db_id      = models.CharField(max_length=40,unique=True, null = True, blank=True )
     details    = models.TextField(max_length=200, default="", null = True, blank=True)
     is_panicking = models.BooleanField(default = False)
-
-    def __str__(self):              # __unicode__ on Python 2
-        return str(self.user.username)
     
     def save(self, *args, **kwargs):
         
         super(Farmland, self).save(*args, **kwargs)
-        self.db_id = 'hd{:03d}'.format(self.id)
+        self.db_id = 'fm{:03d}'.format(self.id)
         super(Farmland, self).save(*args, **kwargs)
-
+    
+    def __str__(self):              # __unicode__ on Python 2
+        return str(self.user.username)
 
 class Bounds(models.Model):
     farmland        = models.ForeignKey('Farmland', on_delete=models.CASCADE)
@@ -97,3 +97,4 @@ class Bounds(models.Model):
 
     class Meta:
         ordering = ('date',)
+        verbose_name_plural = "Bounds"

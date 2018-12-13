@@ -27,17 +27,6 @@ window.onload = ()=>{
     });
 }
 
-
-
-
-
-
-
-
-
-
-
-
 function begin_trail_in_modal(id){
     var lineCoordinates = [];
     // const slug = document.getElementById("slug").value;
