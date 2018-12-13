@@ -185,7 +185,7 @@
   
   <!-- Add the sidebar's background. This div must be placed immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
-  
+  <div id="sound"></div>
 </div>
 <!-- ./wrapper -->
   	
@@ -252,31 +252,12 @@
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvvVEqrwQt8LmAzlB99zmrwWR3vxPDs8w"></script>
       <script src="{%  static "jquery-activmap/js/script.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/modalmap.js" %}"></script> 
+      <script src="{%  static "jquery-activmap/js/panic.js" %}"></script> 
+      <script src="{%  static "jquery-activmap/js/notify.js" %}"></script> 
 
       <!-- <script src="{% static "/assets/vendor_components/gmaps/gmaps.min.js" %}"></script>
       <script src="{% static "/assets/vendor_components/gmaps/jquery.gmaps.js" %}"></script> -->
       
 </body>
-<script>
-  var host = window.location.hostname == 'localhost'
-    ? 'http://localhost:8000/'
-    : 'http://' + window.location.hostname + '/';
 
-  setInterval(() => {
-    check_for_panick()
-  }, 5000);
-
-  function check_for_panick(){
-    var promise = $.getJSON(host + "check");
-
-    promise.done(function(res) {
-      result = res
-        
-      }).then(()=>{
-
-      });
-  }
-  
-  
-</script>
 </html>

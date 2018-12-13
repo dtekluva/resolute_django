@@ -200,7 +200,7 @@ def get_latlng(request, username):
         return HttpResponse(json.dumps(response))
         
     except :
-        response = {"response":"success","data":bounds_list, "message": "user not found" }
+        response = {"response":"Failed","data":bounds_list, "message": "user not found" }
 
         return HttpResponse(json.dumps(response))
 
