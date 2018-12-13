@@ -141,7 +141,7 @@ def collection_check(request, id):
     collection = Collection.objects.get(id = id)
     herdsman = Herdsman.objects.get(id = collection.herdsman.id) #for filtering get just one customer 
     herdsmen = Herdsman.objects.filter(id = collection.herdsman.id) # for iteration
-    locations = serializers.serialize("json", list(chain(Location.objects.filter(collection_id = collection.id), herdsmen)) )
+    locations = serializers.serialize("json", list(Location.objects.filter(collection_id = collection.id).order_by('id')))
 
     return HttpResponse(locations)
 
