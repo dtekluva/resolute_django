@@ -61,6 +61,7 @@ function begin_trail_in_modal(id){
             }).then( (result)=>{
                 prepareLinePath(result);
                 create_trail(lineCoordinates, latlng);
+                console.log(lineCoordinates);
             }).then(()=>{
                 
     
