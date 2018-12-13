@@ -49,7 +49,6 @@ def locationpost(request):
     lagos = datetime.now(tz)
     formatedDate = lagos.strftime("%Y-%m-%d %H:%M:%S")
 
-    # print(request.body)
     if request.method == 'POST':    
         print('carrying out test')
         reqPOST = (json.loads(request.body))
@@ -76,7 +75,6 @@ def locationpost(request):
                 herdsman.lng = lng
                 herdsman.lat = lat
                 herdsman.state = state
-                # print(state)
                 herdsman.address = address
                 herdsman.save()
                 last_location_post = Location.objects.filter(herdsman = herdsman).order_by('-id')[0]
@@ -93,7 +91,6 @@ def locationpost(request):
             else: #SKIP FILTERING OF LAST COLLECTION IF WE CREATED NEW, SINCE WE HAVE THE VALUE ALREADY
 
                 last_collection = Collection.objects.filter(herdsman = herdsman.id).order_by('-id')[0] #GET MOST RECENT COLLECTION
-                print('------------------------',last_collection.herdsman)
 
             #CREATE NEW LOCATION OBJECT
             new_location = Location(state = state, collection = last_collection, herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address, date = formatedDate)
@@ -107,11 +104,6 @@ def locationpost(request):
 
     
             return HttpResponse(json.dumps('Added post to device id {}, name {} '.format(devid, herdsman.name)))   
-    
-
-    locations = Location.objects.all() # for iteration
-    # result = serializers.serialize("json", locations )
-
 
     return HttpResponse(json.dumps({'Success' : 'success'}))
 
@@ -121,7 +113,7 @@ def post_is_too_old(new_post_time, old_post):
     last_post_in_seconds = lastlocation.date.timestamp()
     
     time_difference = (new_post_time.timestamp() - last_post_in_seconds)/60  #CONVERT SECONDS TO MINUTES
-    print('--------------->{}   <===> {} <----------------'.format(time_difference, settings.POSTINTERVAL))
+
     if time_difference > settings.POSTINTERVAL :
         return True
     else :
@@ -144,6 +136,15 @@ def collection_check(request, id):
     locations = serializers.serialize("json", list(Location.objects.filter(collection_id = collection.id).order_by('id')))
 
     return HttpResponse(locations)
+
+def check_panic(request):
+    panicking_herdsmen = Herdsman.objects.filter(is_panicking = True)
+    panicking_farmers = Farmland.objects.filter(is_panicking = True)
+
+    panicking = serializers.serialize("json", list(chain(panicking_farmers, panicking_herdsmen)))
+
+    return HttpResponse(panicking)
+
 
 
 @login_required
@@ -171,7 +172,7 @@ def check_distance(old_coord, new_coord):
     c = a **2 + b **2 #hypothenus as distance between two points
 
     c = math.sqrt(c)
-    print(c)
+    # print(c)
     # 0.0009 = "100m"
     # 0.009 = "1km"
     if c >= 0.00001:
@@ -179,6 +180,8 @@ def check_distance(old_coord, new_coord):
     
     else:
         return False
+
+#HANDLE BOUNDS POST FROM MOBILE
 
 def get_latlng(request, username):
     bounds_list = []
@@ -201,8 +204,6 @@ def get_latlng(request, username):
 
         return HttpResponse(json.dumps(response))
 
-
-#HANDLE BOUNDS POST FROM MOBILE
 
 @csrf_exempt
 def post_latlng(request):
@@ -228,5 +229,26 @@ def post_latlng(request):
                 new_bound.save()
             
             return HttpResponse(json.dumps({"response":"success", "message": "Added bound to {}".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
+    except:
+        return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+
+@csrf_exempt
+def create_panic(request):
+    new_request = json.loads(request.body)
+    username = new_request['data']['username']
+    auth_data = new_request['auth']
+
+    try:
+        user = User.objects.get(username = username)
+        farmland = Farmland.objects.get(user = user.id)
+        session = Session.objects.get(token = auth_data['session_token'], is_active = True)
+    
+        if session._authenticate(auth_data):
+
+                farmland = Farmland.objects.get(user = user.id)
+                farmland.is_panicking = True
+                farmland.save()
+                
+                return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
     except:
         return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 

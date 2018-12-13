@@ -13,12 +13,15 @@ class Herdsman(models.Model):
     lat             = models.FloatField(max_length=100,blank=True, default=0)
     slug            = models.SlugField(blank=True,unique=True)
     address         = models.TextField(default=0)
-    state         = models.TextField(default=0)
+    state           = models.TextField(default=0)
     last_post       = models.DateField(auto_now_add=True, blank=True)
-    is_trespassing  = models.BooleanField(default = False)
     date            = models.DateField(auto_now_add=True)
     db_id           = models.CharField(max_length=40, unique=True, null = True, blank=True)
     no_of_cattle    = models.IntegerField(unique=False, default = "0")
+    details      = models.TextField(max_length=200, default="", null = True, blank=True)
+    is_trespassing  = models.BooleanField(default = False, )
+    is_panicking    = models.BooleanField(default = False)
+
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -65,8 +68,10 @@ class Farmland(models.Model):
     community  = models.TextField(default=0)
     full_name  = models.CharField(max_length=50, null = True)
     phone      = models.CharField(max_length=20, unique=True)
-    token       = models.CharField(max_length=60, null=True, blank = True)
-    db_id           = models.CharField(max_length=40,unique=True, null = True, blank=True )
+    token      = models.CharField(max_length=60, null=True, blank = True)
+    db_id      = models.CharField(max_length=40,unique=True, null = True, blank=True )
+    details    = models.TextField(max_length=200, default="", null = True, blank=True)
+    is_panicking = models.BooleanField(default = False)
 
     def __str__(self):              # __unicode__ on Python 2
         return str(self.user.username)

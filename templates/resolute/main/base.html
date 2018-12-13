@@ -257,4 +257,26 @@
       <script src="{% static "/assets/vendor_components/gmaps/jquery.gmaps.js" %}"></script> -->
       
 </body>
+<script>
+  var host = window.location.hostname == 'localhost'
+    ? 'http://localhost:8000/'
+    : 'http://' + window.location.hostname + '/';
+
+  setInterval(() => {
+    check_for_panick()
+  }, 5000);
+
+  function check_for_panick(){
+    var promise = $.getJSON(host + "check");
+
+    promise.done(function(res) {
+      result = res
+        
+      }).then(()=>{
+
+      });
+  }
+  
+  
+</script>
 </html>

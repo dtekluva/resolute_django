@@ -30,6 +30,8 @@ urlpatterns = [
     path('mapping/<slug:slug>/', views.mapping, name='mapping'),
     path('get_latlng/<slug:username>', views.get_latlng, name='get_latlng'),
     path('post_latlng', views.post_latlng, name='post_latlng'),
+    path('check_panic', views.check_panic, name='check_panic'),
+    path('create_panic', views.create_panic, name='create_panic'),
     
     # path('test', views.test, name='test'),
 ]
