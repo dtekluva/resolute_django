@@ -35,6 +35,8 @@ class Herdsman(models.Model):
 
 class Collection(models.Model):
     herdsman = models.ForeignKey('Herdsman', on_delete=models.CASCADE)
+    lng      = models.FloatField(max_length=100,blank=True, default=0)
+    lat      = models.FloatField(max_length=100,blank=True, default=0)
     start = models.DateTimeField(default=datetime.now(), blank=True)
     stop = models.DateTimeField(default=datetime.now(), blank=True)
 

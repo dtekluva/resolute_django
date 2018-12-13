@@ -51,7 +51,7 @@ def locationpost(request):
 
     # print(request.body)
     if request.method == 'POST':    
-
+        print('carrying out test')
         reqPOST = (json.loads(request.body))
         cleaned_json_post = dict(reqPOST['resource'][0])
 
@@ -79,29 +79,34 @@ def locationpost(request):
                 # print(state)
                 herdsman.address = address
                 herdsman.save()
+                last_location_post = Location.objects.filter(herdsman = herdsman).order_by('-id')[0]
 
             except:
-                return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))
+                return HttpResponse(json.dumps('No user with id {} found in data base please confirm'.format(devid)))#GET LAST LOCATION FOR TIME COMPARISM
 
 
-            if post_is_too_old(lagos): #CHECK IF INTERVAL NOT EXCEEDED
-                last_collection = Collection(herdsman = herdsman, start = formatedDate) #CREATE A NEW COLLECTION IF INTERVAL EXCEEDED
+            if post_is_too_old(lagos, last_location_post): #CHECK IF INTERVAL NOT EXCEEDED
+                last_collection = Collection(herdsman = herdsman, start = formatedDate, lng = lng, lat = lat) #CREATE A NEW COLLECTION IF INTERVAL EXCEEDED
+
                 last_collection.save()
 
             else: #SKIP FILTERING OF LAST COLLECTION IF WE CREATED NEW, SINCE WE HAVE THE VALUE ALREADY
 
-                last_collection = Collection.objects.all().order_by('-id')[0] #GET MOST RECENT COLLECTION
+                last_collection = Collection.objects.filter(herdsman = herdsman.id).order_by('-id')[0] #GET MOST RECENT COLLECTION
+                print('------------------------',last_collection.herdsman)
 
             #CREATE NEW LOCATION OBJECT
             new_location = Location(state = state, collection = last_collection, herdsman = herdsman, lat = lat, lng = lng, speed = speed, address = address, date = formatedDate)
             new_location.save()
 
-            last_collection.stop = new_location.date #COLLECTION STOP TIME
+
+            last_collection.lat, last_collection.lng= [lat,lng] #UPDATE COLLECTION LATITUDE AND LONGITUDE
+            last_collection.stop = new_location.date #UPDATE COLLECTION STOP TIME
             last_collection.save()
 
 
     
-            return HttpResponse(json.dumps('Added post to device id {} '.format(devid)))   
+            return HttpResponse(json.dumps('Added post to device id {}, name {} '.format(devid, herdsman.name)))   
     
 
     locations = Location.objects.all() # for iteration
@@ -111,12 +116,12 @@ def locationpost(request):
     return HttpResponse(json.dumps({'Success' : 'success'}))
 
 
-def post_is_too_old(new_post_time):
-    lastlocation = Location.objects.all().order_by('-id')[0]
+def post_is_too_old(new_post_time, old_post):
+    lastlocation = old_post
     last_post_in_seconds = lastlocation.date.timestamp()
     
-    time_difference = (new_post_time.timestamp() - last_post_in_seconds) / 60 #CONVERT SECONDS TO MINUTES
-    print(time_difference)
+    time_difference = (new_post_time.timestamp() - last_post_in_seconds)/60  #CONVERT SECONDS TO MINUTES
+    print('--------------->{}   <===> {} <----------------'.format(time_difference, settings.POSTINTERVAL))
     if time_difference > settings.POSTINTERVAL :
         return True
     else :
@@ -176,20 +181,25 @@ def check_distance(old_coord, new_coord):
         return False
 
 def get_latlng(request, username):
-
-    user = User.objects.get(username = username)
-    farmland = Farmland.objects.get(user = user.id)
-    bounds = Bounds.objects.filter(farmland = farmland)
     bounds_list = []
+    try:
+        user = User.objects.get(username = username)
+        farmland = Farmland.objects.get(user = user.id)
+        bounds = Bounds.objects.filter(farmland = farmland)
 
-    for location in bounds:
+        for location in bounds:
 
-        point = [location.lat, location.lng]
-        bounds_list.append(point)
+            point = [location.lat, location.lng]
+            bounds_list.append(point)
 
-    response = {"data":bounds_list}
+        response = {"response":"success","data":bounds_list, 'message': 'user {}'.format(farmland), }
 
-    return HttpResponse(json.dumps(response))
+        return HttpResponse(json.dumps(response))
+        
+    except :
+        response = {"response":"success","data":bounds_list, "message": "user not found" }
+
+        return HttpResponse(json.dumps(response))
 
 
 #HANDLE BOUNDS POST FROM MOBILE
