@@ -146,12 +146,20 @@
             <i class="fa fa-map"></i> <span>Map</span>
           </a>
         </li>
-       
+        
+        <li class="{% if page == 'incidents' %}active {% endif %}">
+          <a href="/incidents">
+            <i class="fa fa-arrow-right"></i> <span>Incidents</span>
+          </a>
+        </li>
+
         <li class="{% if page == 'user' %}active {% endif %}">
           <a href="/auth/user">
             <i class="fa fa-user"></i> <span>Users</span>
           </a>
         </li>
+
+
 		
         
       </ul>

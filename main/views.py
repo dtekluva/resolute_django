@@ -20,12 +20,13 @@ host = 'http://localhost:8000/'
 @login_required
 def index(request):
     collections = Collection.objects.all().order_by('-id')[:10]
+    incidents = Incident.objects.all().count()
     herdsmen = Herdsman.objects.all().count()
     farmers = Farmland.objects.all().count()
-    states = Herdsman.objects.values_list('state', flat=True).count()
+    states = Herdsman.objects.values_list('state', flat=True).count()#get unique states from herdsmen object
     print(herdsmen, farmers, states)
     page = 'index'
-    return render(request, 'resolute/main/index.html', {'posts':collections, 'page': page, 'total_farmers': farmers, 'total_states': states, 'total_herdsmen':herdsmen})
+    return render(request, 'resolute/main/index.html', {'posts':collections, 'page': page, 'total_farmers': farmers, 'total_states': states, 'total_herdsmen':herdsmen, 'incidents':incidents})
 
 
 def detail_view(request):
@@ -40,6 +41,14 @@ def table(request):
     locations = Location.objects.all().order_by('-date')
     page = 'table'
     return render(request, 'resolute/main/table.html', {'posts':locations, 'page': page})
+
+@csrf_exempt
+def incidents(request):
+
+    incidents = Incident.objects.all().order_by('-id')
+    page = 'incidents'
+
+    return render(request, 'resolute/main/incident.html', {'page': page, 'incidents':incidents})
 
 
 @csrf_exempt

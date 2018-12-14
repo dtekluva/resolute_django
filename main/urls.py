@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('detail_view', views.detail_view, name='detail_view'),
     path('locationpost', views.locationpost, name='locationpost'),
+    path('incidents', views.incidents, name='incidents'),
     path('table', views.table, name='table'),
     # path('track', views.track, name='track')
     path('check/<slug:slug>/', views.check, name='check'),
