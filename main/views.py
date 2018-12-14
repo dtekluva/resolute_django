@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from main.models import User, Herdsman, Bounds, Location, Farmland, Collection
+from main.models import User, Herdsman, Bounds, Location, Farmland, Collection, Incident
 import json, math, datetime, pytz, ast
 from itertools import chain #allow for merging multiple querysets frorm different models
 from django.core import serializers
@@ -237,18 +237,26 @@ def create_panic(request):
     new_request = json.loads(request.body)
     username = new_request['data']['username']
     auth_data = new_request['auth']
+    data = new_request['data']
 
     try:
+        
         user = User.objects.get(username = username)
         farmland = Farmland.objects.get(user = user.id)
-        session = Session.objects.get(token = auth_data['session_token'], is_active = True)
-    
+        session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+
         if session._authenticate(auth_data):
 
                 farmland = Farmland.objects.get(user = user.id)
                 farmland.is_panicking = True
                 farmland.save()
+
+                #CREATE NEW PANIC INCIDENT
+                new_incident = Incident(user = farmland.user, details = data['details'], lat = data['lat'], lng = data['lng'], name = farmland.full_name, is_farmer = True, location = farmland.community)
+                new_incident.save()
                 
                 return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
-    except:
+                
+    except :
+        
         return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
