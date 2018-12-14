@@ -257,7 +257,28 @@
 
       <!-- <script src="{% static "/assets/vendor_components/gmaps/gmaps.min.js" %}"></script>
       <script src="{% static "/assets/vendor_components/gmaps/jquery.gmaps.js" %}"></script> -->
-      
+      <script>
+        // $('#target_form').show();
+        function show_form(event){
+          // console.log(event);
+          form = document.querySelector('#target_form');
+          console.log(form);
+          $('#target_form').show();
+          // form.setAttribute('hidden', false);
+          form.removeAttribute('hidden');
+
+        }
+
+        function hide_form(event){
+          // console.log(event);
+          form = document.querySelector('#target_form');
+          console.log(form);
+          form.setAttribute('hidden', true);
+          // form.removeAttribute('hidden');
+
+        }
+
+      </script>
 </body>
 
 </html>

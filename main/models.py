@@ -5,9 +5,10 @@ from datetime import date, datetime
 
 # Create your models here.
 class Herdsman(models.Model):
+    user            = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'herdsman', null = True, blank = True)
     name            = models.CharField(max_length=40,unique=False)
     surname         = models.CharField(max_length=40,unique=False)
-    phone           = models.IntegerField(unique=False, default = "00000000")
+    phone           = models.IntegerField(unique=False, default = " ")
     userid          = models.IntegerField(default=0)
     lng             = models.FloatField(max_length=100,blank=True, default=0)
     lat             = models.FloatField(max_length=100,blank=True, default=0)
@@ -18,7 +19,7 @@ class Herdsman(models.Model):
     date            = models.DateField(auto_now_add=True)
     db_id           = models.CharField(max_length=40, unique=True, null = True, blank=True)
     no_of_cattle    = models.IntegerField(unique=False, default = "0")
-    details      = models.TextField(max_length=200, default="", null = True, blank=True)
+    details         = models.TextField(max_length=200, default="", null = True, blank=True)
     is_trespassing  = models.BooleanField(default = False, )
     is_panicking    = models.BooleanField(default = False)
 
@@ -98,3 +99,18 @@ class Bounds(models.Model):
     class Meta:
         ordering = ('date',)
         verbose_name_plural = "Bounds"
+
+class Incident(models.Model):
+    user     = models.ForeignKey(User, on_delete=models.CASCADE)
+    lng      = models.FloatField(max_length=100,blank=True, default=0)
+    lat      = models.FloatField(max_length=100,blank=True, default=0)
+    speed    = models.FloatField(max_length=100,blank=True, default=0)
+    accuracy = models.FloatField(max_length=100,blank=True, default=0)
+    location = models.TextField(default="", blank= True, null= True)
+    date     = models.DateTimeField(auto_now_add=True)
+    name     = models.CharField(max_length=60,unique=False, null = True, blank=True )
+    details  = models.TextField(max_length=200, default="", null = True, blank=True)
+    is_active   = models.BooleanField(default = True)
+    is_farmer   = models.BooleanField(default = False)
+    is_herdsman = models.BooleanField(default = False)
+    treated     = models.BooleanField(default = False)
