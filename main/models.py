@@ -74,6 +74,7 @@ class Farmland(models.Model):
     db_id      = models.CharField(max_length=40,unique=True, null = True, blank=True )
     details    = models.TextField(max_length=200, default="", null = True, blank=True)
     is_panicking = models.BooleanField(default = False)
+    is_mapped    = models.BooleanField(default = False)
     
     def save(self, *args, **kwargs):
         
@@ -113,4 +114,4 @@ class Incident(models.Model):
     is_active   = models.BooleanField(default = True)
     is_farmer   = models.BooleanField(default = False)
     is_herdsman = models.BooleanField(default = False)
-    treated     = models.BooleanField(default = False)
+    is_resolved     = models.BooleanField(default = False)

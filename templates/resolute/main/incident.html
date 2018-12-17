@@ -41,10 +41,9 @@
                   <th>Name</th>
                   <th>Occupation</th>
                   <th>Lat, Lng</th>
-                  <th>Details</th>
                   <th>Location</th>
                   <th>Date</th>
-                  <th>Is Active</th>
+                  <th>Resolved</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,20 +59,19 @@
 					<td><a href="#">herdsman}</a></td>
 					{% endif %}
                   <td>{{incident.lat}}, {{incident.lng}}</td>
-                  <td>{{incident.details | title}}</td>
                   <td>{{incident.location}}</td>
                   <td>{{incident.date}}</td>
                   <td>
-					{% if incident.is_active %}
+					{% if not incident.is_resolved %}
 					<label class="switch switch-border switch-info">
-						<input type="checkbox" checked="" >
+						<input onchange="make_alert(this, '{{incident.id}}')"  type="checkbox" >
 						<span class="switch-indicator"></span>
 						<span class="switch-description"></span>
 					  </label>
 					  {% endif %}
-					{% if incident.is_active == False %}
+					{% if incident.is_resolved %}
 					<label class="switch switch-border switch-info">
-						<input type="checkbox" >
+						<input onchange="make_alert(this, '{{incident.id}}')" type="checkbox" checked >
 						<span class="switch-indicator"></span>
 						<span class="switch-description"></span>
 					  </label>
@@ -101,11 +99,17 @@
 				<i class="fa fa-arrow-circle-down"></i> Hide Form
 			  </button>
 		  
-		  </div>
+			</div>
+			<!-- <div  name="csrfmiddlewaretoken">{{csrf_token}}</div> -->
+			{% csrf_token %}
+			
 	</section>
 	<!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
+<script>
 
+
+</script>
 
 {% endblock %}

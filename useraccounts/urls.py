@@ -24,6 +24,7 @@ urlpatterns = [
     path('user', views.user, name='user'),
     path('test', views.test, name='test'),
     path('create_user', views.create_user, name='create_user'),
+    path('get_users', views.get_users, name='get_users'),
     path('logout', auth_views.LogoutView.as_view(template_name="resolute/registration/login.html"), name='logout'),
     # path('logout', auth_views.logout),
 ]
