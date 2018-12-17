@@ -33,6 +33,10 @@ urlpatterns = [
     path('post_latlng', views.post_latlng, name='post_latlng'),
     path('check_panic', views.check_panic, name='check_panic'),
     path('create_panic', views.create_panic, name='create_panic'),
+    path('resolve_panic_mobile', views.resolve_panic_mobile, name='resolve_panic_mobile'),
+    path('resolve_panic', views.resolve_panic, name='resolve_panic'),
+    path('farmers', views.farmers, name='farmers'),
+    path('herdsmen', views.herdsmen, name='herdsmen'),
     
     # path('test', views.test, name='test'),
 ]

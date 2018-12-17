@@ -52,6 +52,25 @@ def incidents(request):
 
 
 @csrf_exempt
+def farmers(request):
+
+    farmers = Farmland.objects.all().order_by('-id')
+    page = 'farmers'
+
+    return render(request, 'resolute/main/farmers.html', {'page': page, 'farmers':farmers})
+
+
+@csrf_exempt
+def herdsmen(request):
+
+    herdsmen = Herdsman.objects.all().order_by('-id')
+    page = 'herdsmen'
+
+    return render(request, 'resolute/main/herdsmen.html', {'page': page, 'herdsmen':herdsmen})
+
+
+
+@csrf_exempt
 def locationpost(request):
 # Create your views here.
     tz = pytz.timezone('Africa/Lagos')
@@ -155,6 +174,28 @@ def check_panic(request):
     return HttpResponse(panicking)
 
 
+#RESOLVE PANIC 
+@csrf_exempt
+def resolve_panic(request):
+    print(request.body)
+    print(json.loads(request.body))
+    response = json.loads(request.body)
+    incident = Incident.objects.get(id = response['data']['incident_id'])
+    user = User.objects.get(id = incident.user_id)
+    incident.is_resolved = True
+    incident.save()
+
+    try:
+        target = Farmland.objects.get(user_id = user.id)
+        target.is_panicking = False
+        target.save()
+    
+    except:
+        target = Herdsman.objects.get(user_id = user.id)
+        target.is_panicking = False
+        target.save()
+        
+    return HttpResponse(json.dumps(response))
 
 @login_required
 def track(request, slug):
@@ -223,6 +264,7 @@ def post_latlng(request):
     try:
         user = User.objects.get(username = username)
         farmland = Farmland.objects.get(user = user.id)
+        farmland.is_mapped = True
         session = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
         if session._authenticate(auth_data):
@@ -236,7 +278,9 @@ def post_latlng(request):
             for latlng in new_request['data']:
                 new_bound = Bounds(farmland = farmland, lat = latlng[0], lng = latlng[1])
                 new_bound.save()
-            
+
+                #SAVE FARMLAND IS_MAPPED SINCE ALL PROCESSES OF ADDING BOUNDS WERE SUCCESSFUL
+                farmland.save()
             return HttpResponse(json.dumps({"response":"success", "message": "Added bound to {}".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
     except:
         return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
@@ -251,13 +295,14 @@ def create_panic(request):
     try:
         
         user = User.objects.get(username = username)
+        print(user)
         farmland = Farmland.objects.get(user = user.id)
         session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
         if session._authenticate(auth_data):
 
-                farmland = Farmland.objects.get(user = user.id)
                 farmland.is_panicking = True
+                print(farmland)
                 farmland.save()
 
                 #CREATE NEW PANIC INCIDENT
@@ -269,3 +314,6 @@ def create_panic(request):
     except :
         
         return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+
+def resolve_panic_mobile():
+    pass

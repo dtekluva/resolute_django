@@ -147,6 +147,16 @@
           </a>
         </li>
         
+        <li class="{% if page == 'herdsmen' %}active {% endif %}">
+          <a href="/herdsmen">
+            <i class="fa fa- fa-male"></i> <span>Herdsmen</span>
+          </a>
+        </li>
+        <li class="{% if page == 'farmers' %}active {% endif %}">
+          <a href="/farmers">
+            <i class="fa fa- fa-male"></i> <span>Farmers</span>
+          </a>
+        </li>
         <li class="{% if page == 'incidents' %}active {% endif %}">
           <a href="/incidents">
             <i class="fa fa-arrow-right"></i> <span>Incidents</span>
@@ -261,32 +271,13 @@
       <script src="{%  static "jquery-activmap/js/script.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/modalmap.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/panic.js" %}"></script> 
+      <script src="{%  static "jquery-activmap/js/switch_panic.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/notify.js" %}"></script> 
+      <script src="{%  static "jquery-activmap/js/users_page.js" %}"></script> 
 
       <!-- <script src="{% static "/assets/vendor_components/gmaps/gmaps.min.js" %}"></script>
       <script src="{% static "/assets/vendor_components/gmaps/jquery.gmaps.js" %}"></script> -->
-      <script>
-        // $('#target_form').show();
-        function show_form(event){
-          // console.log(event);
-          form = document.querySelector('#target_form');
-          console.log(form);
-          $('#target_form').show();
-          // form.setAttribute('hidden', false);
-          form.removeAttribute('hidden');
-
-        }
-
-        function hide_form(event){
-          // console.log(event);
-          form = document.querySelector('#target_form');
-          console.log(form);
-          form.setAttribute('hidden', true);
-          // form.removeAttribute('hidden');
-
-        }
-
-      </script>
+      
 </body>
 
 </html>

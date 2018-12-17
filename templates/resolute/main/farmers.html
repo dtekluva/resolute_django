@@ -1,0 +1,84 @@
+{% extends "resolute/main/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+  
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Farmers 
+      </h1>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="breadcrumb-item active">Farmers List</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+         
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Farmers List</h3>
+              <h6 class="box-subtitle"></h6>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+				<div class="table-responsive">
+				  <table id="example" class="table table-bordered table-hover table-display nowrap margin-top-10 w-p100 ">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Farmer</th>
+							<th>Phone</th>
+							<th>Location</th>
+							<th>Mapped</th>
+						</tr>
+					</thead>
+					<tbody>
+            {% for farmer in farmers %}
+            <tr>
+              <td>{{farmer.id}}</td>
+              <td>{{farmer.full_name | title}}</td>
+              <td>{{farmer.phone}}</td>
+              <td>{{farmer.community | title}}</td>
+              {% if farmer.is_mapped %}
+              <td style="text-align:center;"><button class="btn  btn-circle btn-success"><i class="fa fa-check"></i></button></td>
+              {% else %}
+              <td style="text-align:center;"><button class="btn  btn-circle btn-warning"><i class="fa fa-times"></i></button></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+					</tbody>				  
+					<tfoot>
+						<tr>
+							<th>ID</th>
+							<th>Farmer</th>
+							<th>Phone</th>
+							<th>Location</th>
+							<th>Mapped</th>
+						</tr>
+					</tfoot>
+				</table>
+				</div>              
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->  
+         
+        
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->        
+        </div>
+        <!-- /.col -->
+  </div>
+      <!-- /.row -->
+{% endblock %}

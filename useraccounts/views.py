@@ -6,6 +6,7 @@ from useraccounts.models import UserAccount, Token_man, Session
 from main.models import Farmland
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 import json
 from snippet import helpers
 import ast
@@ -47,43 +48,63 @@ def loginView(request):
     return render(request, 'resolute/registration/login.html', {'form' : form})
 
 def user(request):
-    page = 'user'
-    users =  User.objects.filter(is_staff = True)
-    person = User.objects.get(id = 1)
-    print(person.useraccount.phone)
-    print(users)
-    return render(request, 'resolute/registration/user.html', {'page':page,
+        page = 'user'
+        users =  User.objects.filter(is_staff = True)
+        person = User.objects.get(id = 1)
+        print(person.useraccount.phone)
+        print(users)
+        return render(request, 'resolute/registration/user.html', {'page':page,
                                                                 'users':users})
 
+def get_users(request):
+        user_list = []
+        data = 0
+        users =  UserAccount.objects.filter(user__is_staff = True).order_by('-id')[0:1]
+        for user in users:
+                data = {
+                        'id':user.user_id, 
+                        'first_name':user.user.first_name, 
+                        'last_name':user.user.last_name, 
+                        'email':user.user.email, 
+                        'phone':user.phone, 
+                        'agency':user.agency
+                        }
+                user_list.append(data)
+
+        response = json.dumps(user_list)
+
+        return HttpResponse(response)
+
+
 def create_user(request):
-    exempted_fields = ["address", "password", "agency"]
-    cleaned_form = helpers.clean(request.POST, exempted_fields)
+        exempted_fields = ["address", "password", "agency"]
+        cleaned_form = helpers.clean(request.POST, exempted_fields)
 
-    try:
-        if request.method == "POST" and request.user.is_superuser:
-            fname = cleaned_form['first_name']
-            lname = cleaned_form['last_name']
-            email = cleaned_form['email']
-            phone = cleaned_form['phone']
-            address = cleaned_form['address']
-            agency = cleaned_form['agency']
-            password = cleaned_form['password']
-            username = fname + agency + phone[6:]
-            print(username)
-            new_user = User(first_name = fname, last_name = lname, email = email, username = username)
+        try:
+                if request.method == "POST" and request.user.is_superuser:
+                        fname = cleaned_form['first_name']
+                        lname = cleaned_form['last_name']
+                        email = cleaned_form['email']
+                        phone = cleaned_form['phone']
+                        address = cleaned_form['address']
+                        agency = cleaned_form['agency']
+                        password = cleaned_form['password']
+                        username = "".join(fname.split()) + "".join(agency.split()) + phone[6:]
+                        print(username)
+                        new_user = User(first_name = fname, last_name = lname, email = email, username = username, is_staff = True)
 
-            new_user.save()
+                        new_user.save()
 
-            new_useraccount = UserAccount(  phone = phone
-                                            , address = address, user_id = new_user.id, agency = agency )
-            new_useraccount.save()
+                        new_useraccount = UserAccount(  phone = phone
+                                                        , address = address, user_id = new_user.id, agency = agency )
+                        new_useraccount.save()
 
-            new_user.set_password(password)
+                        new_user.set_password(password)
 
-            return HttpResponse(json.dumps({"response":"success"}))
-    
-    except:
-        return HttpResponse(json.dumps({"response":"fail"}))
+                        return HttpResponse(json.dumps({"response":"success"}))
+
+        except:
+                return HttpResponse(json.dumps({"response":"fail"}))
 
 
 
