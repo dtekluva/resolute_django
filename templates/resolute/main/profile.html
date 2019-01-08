@@ -1,0 +1,172 @@
+{% extends "resolute/main/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        User Profile
+      </h1>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Examples</a></li>
+        <li class="breadcrumb-item active">User profile</li>
+      </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <div class="row">
+
+          <div class="col-12 col-lg-4">
+            <div class="box box-widget widget-user-4">
+				<!-- Add the bg color to the header using any of the bg-* classes -->
+				<div class="widget-user-header bg-blue-active" style="background: url('../../../images/photo1.png') center center;">
+				   <div class="overlay dark">
+					   <div class="widget-user-image">
+						  <i class="profile_icon fa fa-user-circle-o" aria-hidden="true"></i>
+						</div>
+						{% if user_type == "herdsman" %}
+						<h3 class="widget-user-username">{{collection.surname | title}} {{collection.name | title}}</h3>
+            <h6 class="widget-user-desc">Registered Herdsman</h6>
+            <h6 class="widget-user-desc">{{collection.state | title}} State</h6>
+            <h6 class="widget-user-desc">{{collection.phone }}</h6>
+            <h6 class="widget-user-desc">{{collection.id }}</h6>
+						{% endif %}
+						{% if user_type == "farmer" %}
+						<h3 class="widget-user-username">{{collection.full_name | title}}</h3>
+						<h6 class="widget-user-desc">Registered Farmer</h6>
+            <h6 class="widget-user-desc">{{collection.community | title}} State</h6>
+            <h6 class="widget-user-desc">{{collection.phone }}</h6>
+            <h6 class="widget-user-desc">{{collection.id }}</h6>
+						{% endif %}
+				   </div>
+				</div>
+
+        {% if user_type == "herdsman" %}
+				<div class="box-footer">
+				  <div class="row">
+					<div class="col-sm-4 border-right">
+					  <div class="description-block">
+						<h5 class="description-header"></h5>
+						<span class="description-text"></span>
+					  </div>
+					  <!-- /.description-block -->
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-4 border-right">
+					  <div class="description-block">
+						<h5 class="description-header">{{collection.no_of_cattle}}</h5>
+						<span class="description-text">Cattle</span>
+					  </div>
+					  <!-- /.description-block -->
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-4">
+					  <div class="description-block">
+						<h5 class="description-header"></h5>
+						<span class="description-text"></span>
+					  </div>
+					  <!-- /.description-block -->
+					</div>
+					<!-- /.col -->
+				  </div>
+				  <!-- /.row -->
+				</div>
+        {% endif %}
+
+        {% if user_type == "farmer" %}
+				<div class="box-footer">
+				  <div class="row">
+					<div class="col-sm-4 border-right">
+					  <div class="description-block">
+						<h5 class="description-header"></h5>
+						<span class="description-text"></span>
+					  </div>
+					  <!-- /.description-block -->
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-4 border-right">
+					  <div class="description-block">
+            {% if collection.is_mapped %}
+            <h5 class="description-header">Mapped</h5>
+            {% endif %}
+            {% if not collection.is_mapped %}
+						<span class="description-text">Unmapped</span>
+            {% endif %}
+					  </div>
+					  <!-- /.description-block -->
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-4">
+					  <div class="description-block">
+						<h5 class="description-header"></h5>
+						<span class="description-text"></span>
+					  </div>
+					  <!-- /.description-block -->
+					</div>
+					<!-- /.col -->
+				  </div>
+				  <!-- /.row -->
+				</div>
+        {% endif %}
+      </div>
+        
+			<!-- <div class="box box-inverse box-carousel slide" data-ride="carousel" style="background-color: #ED1C20">
+              <div class="box-header no-border">
+                <span class="fa fa-google-plus font-size-30"></span>
+				  <div class="box-tools pull-right">
+                	<h5 class="box-title box-title-bold">Carousel feed</h5>
+				  </div>
+              </div>
+
+              <div class="carousel-inner">
+                <blockquote class="blockquote blockquote-inverse no-border m-0 py-15 carousel-item active">
+                  <p>Holisticly benchmark plug imperatives for multifunctional deliverables. Seamlessly incubate cross functional action.</p>
+                  <div class="flexbox">
+                    <time class="text-white" datetime="2017-11-22 20:00">22 November, 2017</time>
+                    <span><i class="fa fa-heart"></i> 62</span>
+                  </div>
+                </blockquote>
+
+                <blockquote class="blockquote blockquote-inverse no-border m-0 py-15 carousel-item">
+                  <p>Uniquely revolutionize leveraged catalysts for change for world-class web services. Efficiently underwhelm competitive.</p>
+                  <div class="flexbox">
+                    <time class="text-white" datetime="2017-11-22 20:00">22 November, 2017</time>
+                    <span><i class="fa fa-heart"></i> 45</span>
+                  </div>
+                </blockquote>
+
+                <blockquote class="blockquote blockquote-inverse no-border m-0 py-15 carousel-item">
+                  <p>Enthusiastically optimize cross-media manufactured products without process-centric web services. Conveniently.</p>
+                  <div class="flexbox">
+                    <time class="text-white" datetime="2017-11-22 20:00">22 November, 2017</time>
+                    <span><i class="fa fa-heart"></i> 65</span>
+                  </div>
+                </blockquote>
+              </div>
+
+            </div> -->
+			  
+          </div>
+		  
+        <div class="col-lg-8 col-12">
+                  <div id="profile-canvas" class="gmaps"></div>
+        </div>
+        
+      </div>
+      <!-- /.row -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+	<div hidden id = "id" >{{collection.id}}</div>
+	<div hidden id = "lat" >{{collection.lat}}</div>
+	<div hidden id = "lng" >{{collection.lng}}</div>
+	<!-- /.content-wrapper -->
+  {% endblock %}

@@ -156,6 +156,17 @@ def check(request, slug):
 
     return HttpResponse(locations)
 
+def get_lat_lng(request, id):
+
+    herdsman = Herdsman.objects.get(id = id) #for filtering get just one customer 
+    lat = herdsman.lat
+    lng = herdsman.lng
+
+    name = herdsman.name
+    print(name)
+
+    return HttpResponse(json.dumps({'lat':lat, 'lng':lng}))
+
 def collection_check(request, id):
 
     collection = Collection.objects.get(id = id)
@@ -317,3 +328,23 @@ def create_panic(request):
 
 def resolve_panic_mobile():
     pass
+
+
+def profile_page(request, target_id, is_farmer):
+
+    user_type  = 'farmer' if eval(is_farmer)  else 'herdsman'     
+
+    if user_type == 'herdsman' :
+
+        user = User.objects.get(incident = target_id) 
+        collection = Herdsman.objects.get(user = user.id) 
+        print(collection.name)
+
+    elif user_type == 'farmer' :
+
+        user = User.objects.get(incident = target_id) 
+        collection = Farmland.objects.get(user = user.id) 
+
+    page = 'profile'
+    
+    return render(request, 'resolute/main/profile.html', {'page': page, 'user_type':user_type, 'collection':collection})

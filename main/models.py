@@ -22,10 +22,12 @@ class Herdsman(models.Model):
     details         = models.TextField(max_length=200, default="", null = True, blank=True)
     is_trespassing  = models.BooleanField(default = False, )
     is_panicking    = models.BooleanField(default = False)
+    token           = models.CharField(max_length=60, null=True, blank = True, default = "xxoopz")
+
 
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.name +  self.phone)
         super(Herdsman, self).save(*args, **kwargs)
         self.db_id = 'hd{:03d}'.format(self.id)
         super(Herdsman, self).save(*args, **kwargs)
@@ -68,6 +70,8 @@ class Location(models.Model):
 class Farmland(models.Model):
     user       = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'farmland', null = True, blank = True, default = 1)
     community  = models.TextField(default=0)
+    lng             = models.FloatField(max_length=100,blank=True, default=0)
+    lat             = models.FloatField(max_length=100,blank=True, default=0)
     full_name  = models.CharField(max_length=50, null = True)
     phone      = models.CharField(max_length=20, unique=True)
     token      = models.CharField(max_length=60, null=True, blank = True)

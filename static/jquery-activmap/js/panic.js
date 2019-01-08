@@ -63,11 +63,16 @@ function show_alert(data){
     promise.then(
     result =>{
 
-        let target = document.querySelector('div.notifyjs-bootstrap-base');
-        // console.log(target);
-        target.onclick = e =>{
-            // console.log(e, result);
-        }
+        let target = document.querySelectorAll('div.notifyjs-bootstrap-base');
+        console.log(target);
+        target.forEach(element => {
+            
+            element.onclick = e =>{
+                console.log(e.target.innerHTML);
+                e.preventDefault();    
+                
+            }
+        });
     },
     error => alert(error) // doesn't run
     );
