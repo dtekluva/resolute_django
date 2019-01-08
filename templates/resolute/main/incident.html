@@ -51,12 +51,12 @@
                 {% for incident in incidents %}
                 <tr>
                   <td>{{incident.id}}</td>
-				  <td><a href="#">{{incident.name | title}}</a></td>
+				  <td><a href="../../profile_page/{{incident.id}}/{{incident.is_farmer}}">{{incident.name | title}}</a></td>
 					{% if incident.is_farmer %}
 					<td><a href="#">Farmer</a></td>
 					{% endif %}
 					{% if incident.is_herdsman %}
-					<td><a href="#">herdsman}</a></td>
+					<td><a href="#">herdsman</a></td>
 					{% endif %}
                   <td>{{incident.lat}}, {{incident.lng}}</td>
                   <td>{{incident.location}}</td>

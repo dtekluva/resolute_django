@@ -29,6 +29,7 @@ urlpatterns = [
     path('track/<slug:slug>/', views.track, name='track'),
     path('trail/<slug:slug>/', views.trail, name='trail'),
     path('mapping/<slug:slug>/', views.mapping, name='mapping'),
+    path('get_lat_lng/<slug:id>', views.get_lat_lng, name='get_lat_lng'),# FOR PROFILE REALTIME MAP
     path('get_latlng/<slug:username>', views.get_latlng, name='get_latlng'),
     path('post_latlng', views.post_latlng, name='post_latlng'),
     path('check_panic', views.check_panic, name='check_panic'),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('resolve_panic', views.resolve_panic, name='resolve_panic'),
     path('farmers', views.farmers, name='farmers'),
     path('herdsmen', views.herdsmen, name='herdsmen'),
+    path('profile_page/<int:target_id>/<slug:is_farmer>', views.profile_page, name='profile_page')
     
     # path('test', views.test, name='test'),
 ]

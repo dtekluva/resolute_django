@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from useraccounts.forms import LoginForm
 from django.contrib.auth.models import User
 from useraccounts.models import UserAccount, Token_man, Session
-from main.models import Farmland
+from main.models import Farmland, Herdsman
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
@@ -125,30 +125,63 @@ def mobile_register(request):
         phone = cleaned_form['phone']
         community = cleaned_form['community']
         pin = cleaned_form['pin']
+        user_type = cleaned_form['user_type']
         username = phone
 
-        if User.objects.filter(username = username).count() > 0:
-                return HttpResponse(json.dumps({"response":"failed", 'code': '400', 'message':'Phone number exists'}))
+        if user_type == 'herdsman':
+                if User.objects.filter(username = username).count() > 0:
+                        return HttpResponse(json.dumps({"response":"failed", 'code': '400', 'message':'Phone number exists'}))
+                try:
+                        name_list = fname.split(' ')
+                        new_user = User(first_name = name_list[0], last_name = name_list[1], username = username)
+                except:
+                        new_user = User(first_name = fname, last_name = "", username = username)
+                         
 
-        new_user = User(first_name = fname, username = username)
+                new_user.save()
 
-        new_user.save()
+                #NEW FARM REFERS TO A NEW FARMLAND
+                try:
+                        name_list = fname.split(' ')
+                        new_herdsman = Herdsman(  phone = phone, name = name_list[0], surname = name_list[1], address = community, user_id = new_user.id)
+                except:
+                        new_herdsman = Herdsman(   phone = phone, name = fname, surname = "", address = community, user_id = new_user.id)
 
-        #NEW FARM REFERS TO A NEW FARMLAND
-        new_farm = Farmland(  phone = phone, full_name = fname
-                                        , community = community, user_id = new_user.id)
+                #add  mobile authentication token                                
+                tokenize = Token_man(new_herdsman)
+                tokenize.add_token()
 
-        #add  mobile authentication token                                
-        tokenize = Token_man(new_farm)
-        tokenize.add_token()
+                new_herdsman.save()
 
-        new_farm.save()
-
-        new_user.set_password(pin + "????")
-        new_user.save()
+                new_user.set_password(pin + "????")
+                new_user.save()
 
 
-        return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}}))
+                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_herdsman.user.username, 'client_token': new_herdsman.token}, "user_type": user_type}))
+
+        elif user_type == 'farmer':
+                if User.objects.filter(username = username).count() > 0:
+                        return HttpResponse(json.dumps({"response":"failed", 'code': '400', 'message':'Phone number exists'}))
+
+                new_user = User(first_name = fname, username = username)
+
+                new_user.save()
+
+                #NEW FARM REFERS TO A NEW FARMLAND
+                new_farm = Farmland(  phone = phone, full_name = fname
+                                                , community = community, user_id = new_user.id)
+
+                #add  mobile authentication token                                
+                tokenize = Token_man(new_farm)
+                tokenize.add_token()
+
+                new_farm.save()
+
+                new_user.set_password(pin + "????")
+                new_user.save()
+
+
+                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}, "user_type": user_type}))
 
     return HttpResponse(json.dumps({"response":"failed"}))
 
