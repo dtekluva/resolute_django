@@ -158,12 +158,18 @@ def check(request, slug):
 
 def get_lat_lng(request, id):
 
-    herdsman = Herdsman.objects.get(id = id) #for filtering get just one customer 
-    lat = herdsman.lat
-    lng = herdsman.lng
+    try:
+        target = Herdsman.objects.get(id = id) #for filtering get just one customer 
+        lat = target.lat
+        lng = target.lng
 
-    name = herdsman.name
-    print(name)
+        name = target.name
+        print(name)
+    
+    except:
+        target = Farmland.objects.get(id = id) #for filtering get just one customer 
+        lat = target.lat
+        lng = target.lng
 
     return HttpResponse(json.dumps({'lat':lat, 'lng':lng}))
 
