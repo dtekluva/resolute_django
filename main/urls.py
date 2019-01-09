@@ -36,6 +36,7 @@ urlpatterns = [
     path('create_panic', views.create_panic, name='create_panic'),
     path('resolve_panic_mobile', views.resolve_panic_mobile, name='resolve_panic_mobile'),
     path('resolve_panic', views.resolve_panic, name='resolve_panic'),
+    path('recurring_gps_post', views.recurring_gps_post, name='recurring_gps_post'),
     path('farmers', views.farmers, name='farmers'),
     path('herdsmen', views.herdsmen, name='herdsmen'),
     path('get_client_data', views.get_client_data, name='get_client_data'),

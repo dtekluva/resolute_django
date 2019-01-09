@@ -305,28 +305,46 @@ def post_latlng(request):
 @csrf_exempt
 def create_panic(request):
     new_request = json.loads(request.body)
-    username = new_request['data']['username']
-    auth_data = new_request['auth']
-    data = new_request['data']
+    username    = new_request['data']['username']
+    auth_data   = new_request['auth']
+    data        = new_request['data']
+    user_type    = new_request['user_type']
 
     try:
-        
-        user = User.objects.get(username = username)
-        print(user)
-        farmland = Farmland.objects.get(user = user.id)
-        session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+        if user_type == "farmer":
+            user = User.objects.get(username = username)
+            print(user)
+            logged_user =Farmland.objects.get(user = user.id)
+            session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
-        if session._authenticate(auth_data):
+            if session._authenticate(auth_data):
 
-                farmland.is_panicking = True
-                print(farmland)
-                farmland.save()
+                    logged_user.is_panicking = True
+                    logged_user.save()
 
-                #CREATE NEW PANIC INCIDENT
-                new_incident = Incident(user = farmland.user, details = data['details'], lat = data['lat'], lng = data['lng'], name = farmland.full_name, is_farmer = True, location = farmland.community)
-                new_incident.save()
-                
-                return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
+                    #CREATE NEW PANIC INCIDENT
+                    new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
+                    new_incident.save()
+                    
+                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user),  'auth_keys': {'session_token': session.token}}))
+
+        elif user_type == "herdsman":
+            user = User.objects.get(username = username)
+            print(user)
+            logged_user =Herdsman.objects.get(user = user.id)
+            session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+
+            if session._authenticate(auth_data):
+
+                    logged_user.is_panicking = True
+                    logged_user.save()
+
+                    #CREATE NEW PANIC INCIDENT
+                    new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= False, location =logged_user.address)
+                    new_incident.save()
+
+                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user),  'auth_keys': {'session_token': session.token}}))
+            
                 
     except :
         
@@ -358,6 +376,45 @@ def get_client_data(request):
             if user_type == "herdsman":
 
                 herdsman = Herdsman.objects.get(user = user.id)
+
+            
+                return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
+            
+
+    
+    return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+
+
+@csrf_exempt
+def recurring_gps_post(request):
+
+    new_request = json.loads(request.body)
+    username = new_request['data']['username']
+    lat = new_request['data']['lat']
+    lng = new_request['data']['lng']
+    auth_data = new_request['auth']
+    user_type = new_request['user_type']  
+        
+    user = User.objects.get(username = username)
+    session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+
+    if session._authenticate(auth_data):
+
+            if user_type == "farmer":
+
+                farmland = Farmland.objects.get(user = user.id)
+                farmland.lat = lat
+                farmland.lng = lng
+                farmland.save()
+            
+                return HttpResponse(json.dumps({"response":"success", "data": {"name":farmland.full_name, "phone":farmland.phone, "address":farmland.community},  'auth_keys': {'session_token': session.token}}))
+
+            if user_type == "herdsman":
+
+                herdsman = Herdsman.objects.get(user = user.id)
+                herdsmnan.lat = lat
+                herdsmnan.lng = lng
+                herdsmnan.save()
 
             
                 return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
