@@ -308,7 +308,7 @@ def create_panic(request):
     username    = new_request['data']['username']
     auth_data   = new_request['auth']
     data        = new_request['data']
-    user_type    = new_request['user_type']
+    user_type    = new_request['data']['user_type']
 
     try:
         if user_type == "farmer":
@@ -340,7 +340,7 @@ def create_panic(request):
                     logged_user.save()
 
                     #CREATE NEW PANIC INCIDENT
-                    new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= False, location =logged_user.address)
+                    new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
                     new_incident.save()
 
                     return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user),  'auth_keys': {'session_token': session.token}}))
