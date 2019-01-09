@@ -308,10 +308,11 @@ def create_panic(request):
     username    = new_request['data']['username']
     auth_data   = new_request['auth']
     data        = new_request['data']
-    user_type    = new_request['data']['user_type']
+    user_type    = new_request['user_type']
+    user_type2    = new_request['data']['user_type']
 
     try:
-        if user_type == "farmer":
+        if user_type == "farmer" or user_type2 == "farmer":
             user = User.objects.get(username = username)
             print(user)
             logged_user =Farmland.objects.get(user = user.id)
@@ -328,7 +329,7 @@ def create_panic(request):
                     
                     return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user),  'auth_keys': {'session_token': session.token}}))
 
-        elif user_type == "herdsman":
+        elif user_type == "herdsman" or user_type == "herdsman":
             user = User.objects.get(username = username)
             print(user)
             logged_user =Herdsman.objects.get(user = user.id)
