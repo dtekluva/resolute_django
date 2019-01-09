@@ -27,7 +27,7 @@ class Herdsman(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name +  self.phone)
+        self.slug = slugify(self.name +  str(self.phone))
         super(Herdsman, self).save(*args, **kwargs)
         self.db_id = 'hd{:03d}'.format(self.id)
         super(Herdsman, self).save(*args, **kwargs)
