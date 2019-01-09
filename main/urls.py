@@ -38,6 +38,7 @@ urlpatterns = [
     path('resolve_panic', views.resolve_panic, name='resolve_panic'),
     path('farmers', views.farmers, name='farmers'),
     path('herdsmen', views.herdsmen, name='herdsmen'),
+    path('get_client_data', views.get_client_data, name='get_client_data'),
     path('profile_page/<int:target_id>/<slug:is_farmer>', views.profile_page, name='profile_page')
     
     # path('test', views.test, name='test'),

@@ -29,16 +29,17 @@ class Token_man():
     def add_token(self):
         self.user.token = self.generate_token()
         self.user.save()
+        print(self.user.token)
 
 
 class Session(models.Model):
-    user = models.ForeignKey(Farmland, on_delete=models.CASCADE, related_name = 'farmland')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null = True, blank = True,  related_name = 'user')
     token = models.CharField(max_length=60, null=True, blank = True)
     is_active = models.BooleanField(default = True)
 
     #CHECK IF SESSION TOKEN POSTED IS CORRECT 
-    def token_is_correct(self, client_token, session_token ):
-        if self.user.token == client_token and self.token == session_token:
+    def token_is_correct(self, user_object, client_token, session_token ):
+        if user_object.token == client_token and self.token == session_token:
             return True
         else: 
             return False
