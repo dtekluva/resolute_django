@@ -26609,7 +26609,11 @@ Contents:
   .breadcrumb {
     margin-bottom: 1rem;
   }
+  .detail{
+    margin-top: 10px !important;
+    }
 }
+
 
 /* #12. Screen Height >= 700px */
 @media (min-height: 700px) and (min-width: 768px) {

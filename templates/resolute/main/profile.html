@@ -24,26 +24,24 @@
       <div class="row">
 
           <div class="col-12 col-lg-4">
-            <div class="box box-widget widget-user-4">
+            <div class="box box-widget widget-user-4 profile_card">
 				<!-- Add the bg color to the header using any of the bg-* classes -->
 				<div class="widget-user-header bg-blue-active" style="background: url('../../../images/photo1.png') center center;">
-				   <div class="overlay dark">
+				   <div class="overlay dark profile_card">
 					   <div class="widget-user-image">
 						  <i class="profile_icon fa fa-user-circle-o" aria-hidden="true"></i>
 						</div>
 						{% if user_type == "herdsman" %}
 						<h3 class="widget-user-username">{{collection.surname | title}} {{collection.name | title}}</h3>
-            <h6 class="widget-user-desc">Registered Herdsman</h6>
-            <h6 class="widget-user-desc">{{collection.state | title}} State</h6>
-            <h6 class="widget-user-desc">{{collection.phone }}</h6>
-            <h6 class="widget-user-desc">{{collection.id }}</h6>
+            <h6 class="widget-user-desc detail">Registered Herdsman</h6>
+            <h6 class="widget-user-desc detail">{{collection.state | title}} State</h6>
+            <h6 class="widget-user-desc detail">{{collection.phone }}</h6>
 						{% endif %}
 						{% if user_type == "farmer" %}
 						<h3 class="widget-user-username">{{collection.full_name | title}}</h3>
-						<h6 class="widget-user-desc">Registered Farmer</h6>
-            <h6 class="widget-user-desc">{{collection.community | title}} State</h6>
-            <h6 class="widget-user-desc">{{collection.phone }}</h6>
-            <h6 class="widget-user-desc">{{collection.id }}</h6>
+						<h6 class="widget-user-desc detail">Registered Farmer</h6>
+            <h6 class="widget-user-desc detail">{{collection.community | title}} State</h6>
+            <h6 class="widget-user-desc detail">{{collection.phone }}</h6>
 						{% endif %}
 				   </div>
 				</div>
