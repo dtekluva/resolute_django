@@ -329,6 +329,38 @@ def create_panic(request):
 def resolve_panic_mobile():
     pass
 
+@csrf_exempt
+def get_client_data(request):
+
+    new_request = json.loads(request.body)
+    username = new_request['data']['username']
+    auth_data = new_request['auth']
+    user_type = new_request['user_type']  
+        
+    user = User.objects.get(username = username)
+    session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+
+    if session._authenticate(auth_data):
+
+            if user_type == "farmer":
+
+                farmland = Farmland.objects.get(user = user.id)
+
+            
+                return HttpResponse(json.dumps({"response":"success", "data": {"name":farmland.full_name, "phone":farmland.phone, "address":farmland.community},  'auth_keys': {'session_token': session.token}}))
+
+            if user_type == "herdsman":
+
+                herdsman = Herdsman.objects.get(user = user.id)
+
+            
+                return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
+            
+
+    
+    return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+
+
 
 def profile_page(request, target_id, is_farmer):
 

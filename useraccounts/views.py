@@ -118,7 +118,7 @@ def mobile_register(request):
 
         exempted_fields = ["comunity", "full_name"]
 
-        #Load Response jason from Post and clean values remove trailing spaces
+        # Load Response jason from Post and clean values remove trailing spaces
         cleaned_form = helpers.clean(json.loads(request.body), exempted_fields) 
 
         fname = cleaned_form['full_name']
@@ -148,9 +148,8 @@ def mobile_register(request):
                         new_herdsman = Herdsman(   phone = phone, name = fname, surname = "", address = community, user_id = new_user.id)
 
                 #add  mobile authentication token                                
-                tokenize = Token_man(new_herdsman)
-                tokenize.add_token()
-
+                tokenize = Token_man(new_user)
+                new_herdsman.token = tokenize.generate_token()
                 new_herdsman.save()
 
                 new_user.set_password(pin + "????")
@@ -172,8 +171,8 @@ def mobile_register(request):
                                                 , community = community, user_id = new_user.id)
 
                 #add  mobile authentication token                                
-                tokenize = Token_man(new_farm)
-                tokenize.add_token()
+                tokenize = Token_man(new_user)
+                new_farm.token = tokenize.generate_token()
 
                 new_farm.save()
 
@@ -216,24 +215,31 @@ def mobile_signin(request):
 
                 if user.username == username: #allows user to login using username
 
-                        user = User.objects.get(username=username)
-                        farmland = Farmland.objects.get(user__id = user.id)
+                        try:
+                                user = User.objects.get(username=username)
+                                auth_object = Farmland.objects.get(user__id = user.id)
+                                user_type = "farmer"
+                        except:
+                                user = User.objects.get(username=username)
+                                auth_object = Herdsman.objects.get(user__id = user.id)
+                                user_type = "herdsman"
                         
                         # if not _authenticate(farmland, client_token):
                         #         return HttpResponse(json.dumps({"response":"failed", 'code':['401','unauthorized request, (Bad token)'] })) 
 
                         try:
-                                existing_session = Session.objects.get(user__id = farmland.id, is_active = True)
+                                existing_session = Session.objects.get(user__id = user.id, is_active = True)
                                 existing_session.disable()
                         
                         except:
                                 pass
 
-                        if Session.objects.filter(user__id = farmland.id, is_active = True).count() < 1:
-                                new_session = Session.objects.create(user = farmland)
+                        if Session.objects.filter(user__id = user.id, is_active = True).count() < 1:
+                                new_session = Session(user_id = user.id)
                                 new_session.save()
                                 
-                                return HttpResponse(json.dumps({"response":"success",  'auth_keys': {'session_token': new_session.token, 'client_token': farmland.token}}))
+                                return HttpResponse(json.dumps({"response":"success", "user_type":user_type, 'auth_keys': {'session_token': new_session.token, 'client_token': auth_object.token}}))
+
 
         return HttpResponse(json.dumps({"response":"failed", 'code':['400','Bad request'] }))
 
