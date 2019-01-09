@@ -309,7 +309,7 @@ def create_panic(request):
     auth_data   = new_request['auth']
     data        = new_request['data']
     user_type    = new_request['user_type']
-    user_type2    = new_request['data']['user_type']
+    user_type2    = new_request['user_type']
 
     try:
         if user_type == "farmer" or user_type2 == "farmer":
