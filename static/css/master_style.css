@@ -2817,6 +2817,9 @@ input[type="color"] {
 .box .overlay.dark, .overlay-wrapper .overlay.dark {
     background: rgba(0, 0, 0, .5);
 }
+.box .overlay.dark, .overlay-wrapper .overlay.dark {
+    background: #4fb852 !important;
+}
 /*.box-body:after, .box-body:before, .box-footer:after, .box-footer:before, .box-header:after, .box-header:before {
     content: " ";
     display: table;
@@ -14962,8 +14965,16 @@ hr {
     text-align: right;
 }
 
+.detail{
+  margin-bottom: 10px !important;
+  };
+
 .profile_icon{
   font-size: 34px;
+};
+
+.profile_card{
+  background-color: #4fb852 !important;
 };
 
 

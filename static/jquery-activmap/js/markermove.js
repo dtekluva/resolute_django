@@ -54,9 +54,6 @@ var create_trail = ( (latlng)=>{
                 trail_map.panTo(latlng );
             });
         }, 2000);
-    
-
-
 });
 
 
