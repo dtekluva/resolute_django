@@ -257,12 +257,16 @@ def get_latlng(request, username):
         farmland = Farmland.objects.get(user = user.id)
         bounds = Bounds.objects.filter(farmland = farmland)
 
+        print(len(bounds))
         for location in bounds:
 
             point = [location.lat, location.lng]
             bounds_list.append(point)
 
-        response = {"response":"success","data":bounds_list, 'message': 'user {}'.format(farmland), }
+        start_latlng = [bounds[0].lat, bounds[0].lng]
+        end_latlng = [bounds[len(bounds)-1].lat, bounds[len(bounds)-1].lng]
+
+        response = {"response":"success","data":{"bounds":bounds_list, "start_latlng":start_latlng, "end_latlng":end_latlng}, 'message': 'user {}'.format(farmland), }
 
         return HttpResponse(json.dumps(response))
         
