@@ -130,7 +130,7 @@ def mobile_register(request):
 
         if user_type == 'herdsman':
                 if User.objects.filter(username = username).count() > 0:
-                        return HttpResponse(json.dumps({"response":"failed", 'code': '400', 'message':'Phone number exists'}))
+                        return HttpResponse(json.dumps({"response":"failed", 'auth_keys': {'client_username': '?', 'client_token': '?'}, "user_type": '?', 'code': '409', 'message':'Phone number exists'}))
                 try:
                         name_list = fname.split(' ')
                         new_user = User(first_name = name_list[0], last_name = name_list[1], username = username)
@@ -160,7 +160,7 @@ def mobile_register(request):
 
         elif user_type == 'farmer':
                 if User.objects.filter(username = username).count() > 0:
-                        return HttpResponse(json.dumps({"response":"failed", 'code': '400', 'message':'Phone number exists'}))
+                        return HttpResponse(json.dumps({"response":"failed", 'auth_keys': {'client_username': '?', 'client_token': '?'}, "user_type": '?', 'code': '409', 'message':'Phone number exists'}))
 
                 new_user = User(first_name = fname, username = username)
 
@@ -180,7 +180,7 @@ def mobile_register(request):
                 new_user.save()
 
 
-                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}, "user_type": user_type}))
+                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}, "user_type": user_type, 'message':'Success'}))
 
     return HttpResponse(json.dumps({"response":"failed"}))
 
@@ -194,7 +194,7 @@ def mobile_signin(request):
                         phone = post['phone']
                         password = post['pin'] + "????"
                 except:
-                        return HttpResponse(json.dumps({"response":"failed", 'code':['400','Invalid Json Payload'] }))
+                        return HttpResponse(json.dumps({"response":"failed",'code':'400', 'message':['400','Invalid Json Payload'] }))
  
 
                 #NOTE THAT CLIENT TOKEN IS NO LONGER REQUIRED BUT JUST THERE, TO BE REMOVED AT A LATER TIME
