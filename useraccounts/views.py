@@ -156,7 +156,7 @@ def mobile_register(request):
                 new_user.save()
 
 
-                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_herdsman.user.username, 'client_token': new_herdsman.token}, "user_type": user_type}))
+                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_herdsman.user.username, 'client_token': new_herdsman.token}, "user_type": user_type, 'message':'Registered successfully'}))
 
         elif user_type == 'farmer':
                 if User.objects.filter(username = username).count() > 0:
@@ -180,7 +180,7 @@ def mobile_register(request):
                 new_user.save()
 
 
-                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}, "user_type": user_type, 'message':'Success'}))
+                return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}, "user_type": user_type, 'message':'Registered successfully'}))
 
     return HttpResponse(json.dumps({"response":"failed"}))
 
