@@ -1,5 +1,5 @@
 {% extends "resolute/main/base.html" %}
-{% load static %}
+{% load extra_tags %}
 
 {% block content %}
 
@@ -34,12 +34,12 @@
 						<h3 class="widget-user-username">{{collection.surname | title}} {{collection.name | title}}</h3>
             <h6 class="widget-user-desc detail">Registered Herdsman</h6>
             <h6 class="widget-user-desc detail">{{collection.state | title}} State</h6>
-            <h6 class="widget-user-desc detail">{{collection.phone }}</h6>
+            <h6 class="widget-user-desc detail">{{collection.phone | lead_zero:"1" }}</h6>
 						{% endif %}
 						{% if user_type == "farmer" %}
 						<h3 class="widget-user-username">{{collection.full_name | title}}</h3>
 						<h6 class="widget-user-desc detail">Registered Farmer</h6>
-            <h6 class="widget-user-desc detail">{{collection.community | title}} State</h6>
+            <h6 class="widget-user-desc detail">{{collection.state | title}} State</h6>
             <h6 class="widget-user-desc detail">{{collection.phone }}</h6>
 						{% endif %}
 				   </div>

@@ -1,5 +1,5 @@
 {% extends "resolute/main/base.html" %}
-{% load static %}
+{% load extra_tags %}
 
 {% block content %}
 
@@ -41,13 +41,14 @@
 							<th>Location</th>
 							<th>Population</th>
 						</tr>
-					</thead>
+          </thead>
+
 					<tbody>
             {% for herdsman in herdsmen %}
             <tr>
               <td>{{herdsman.id}}</td>
               <td>{{herdsman.name | title}} {{herdsman.surname | title}}</td>
-              <td>{{herdsman.phone}}</td>
+              <td>{{herdsman.phone | lead_zero:"1"}}</td>
               <td>{{herdsman.state | title}}</td>
               <td>{{herdsman.no_of_cattle}}</td>
               
