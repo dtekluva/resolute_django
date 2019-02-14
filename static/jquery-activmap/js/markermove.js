@@ -3,7 +3,7 @@ var host = window.location.hostname == 'localhost'
     ? 'http://localhost:8000/'
     : 'http://' + window.location.hostname + '/';
 
-var position = [6.6577124, 6.3185216];
+var position = [6.6577124, 11.3185216];
 var x = 0;
 var lineCoordinates = [];
 var addresses = [];
@@ -19,6 +19,7 @@ const user_id = document.getElementById("id").innerHTML;
  promise.done(function(res) {
     result = res
     console.log(result)
+    console.log(user_id)
     pos = [result.lat,  result.lng]
     latlng = new google.maps.LatLng(pos[0],pos[1]);
     let myOptions = {
@@ -79,9 +80,7 @@ var load_trail = ((result)=>{
     
                 linePath.setMap(trail_map);
                 });
-            
-
-
+          
 function dist_is_far(old_lng, new_lng, old_lat, new_lat){ // calculate distance to make sure to only display long range travel on map
     // console.log(old_lng, new_lng, old_lat, new_lat)
 
@@ -102,6 +101,8 @@ function dist_is_far(old_lng, new_lng, old_lat, new_lat){ // calculate distance 
     }
         
 }
+
+
 function toggleBounce(e) {
     console.log(e)
     if (marker.getAnimation() !== null) {

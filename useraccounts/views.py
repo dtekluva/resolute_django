@@ -77,7 +77,7 @@ def get_users(request):
 
 
 def create_user(request):
-        exempted_fields = ["address", "password", "agency"]
+        exempted_fields = ["address", "password", "agency", "livestock_population"]
         cleaned_form = helpers.clean(request.POST, exempted_fields)
 
         try:
@@ -116,16 +116,19 @@ def mobile_register(request):
 
     if request.method == 'POST':
 
-        exempted_fields = ["comunity", "full_name"]
+        exempted_fields = ["comunity", "full_name", "livestock_population"]
 
         # Load Response jason from Post and clean values remove trailing spaces
         cleaned_form = helpers.clean(json.loads(request.body), exempted_fields) 
 
         fname = cleaned_form['full_name']
         phone = cleaned_form['phone']
+        state = cleaned_form['state']
         community = cleaned_form['community']
         pin = cleaned_form['pin']
         user_type = cleaned_form['user_type']
+        livestock_population = cleaned_form['livestock_population']
+        product_types = cleaned_form['product_types']
         username = phone
 
         if user_type == 'herdsman':
@@ -143,9 +146,9 @@ def mobile_register(request):
                 #NEW FARM REFERS TO A NEW FARMLAND
                 try:
                         name_list = fname.split(' ')
-                        new_herdsman = Herdsman(  phone = phone, name = name_list[0], surname = name_list[1], address = community, user_id = new_user.id)
+                        new_herdsman = Herdsman(  phone = phone, name = name_list[0], surname = name_list[1], address = community, user_id = new_user.id, state = state, static_state = state, no_of_cattle = livestock_population)
                 except:
-                        new_herdsman = Herdsman(   phone = phone, name = fname, surname = "", address = community, user_id = new_user.id)
+                        new_herdsman = Herdsman(   phone = phone, name = fname, surname = "", address = community, user_id = new_user.id, state = state, static_state = state, no_of_cattle = livestock_population)
 
                 #add  mobile authentication token                                
                 tokenize = Token_man(new_user)
@@ -167,8 +170,8 @@ def mobile_register(request):
                 new_user.save()
 
                 #NEW FARM REFERS TO A NEW FARMLAND
-                new_farm = Farmland(  phone = phone, full_name = fname
-                                                , community = community, user_id = new_user.id)
+                new_farm = Farmland(  phone = phone, full_name = fname,
+                                                state = state, products = product_types, community = community, user_id = new_user.id)
 
                 #add  mobile authentication token                                
                 tokenize = Token_man(new_user)
