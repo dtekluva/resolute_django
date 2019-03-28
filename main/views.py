@@ -277,6 +277,7 @@ def get_latlng(request, username):
 
 
 @csrf_exempt
+#POST LAT_LNG SERIES FOR BOUNDS PURPOSES DIFFERENT FROM PANIC
 def post_latlng(request):
     new_request = json.loads(request.body)
     username = new_request['username']
@@ -324,6 +325,7 @@ def create_panic(request):
 
             if session._authenticate(auth_data):
 
+                    logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
                     logged_user.is_panicking = True
                     logged_user.save()
 
@@ -341,6 +343,7 @@ def create_panic(request):
 
             if session._authenticate(auth_data):
 
+                    logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
                     logged_user.is_panicking = True
                     logged_user.save()
 
