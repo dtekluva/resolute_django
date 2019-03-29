@@ -13,3 +13,13 @@ def lead_zero(value, desired_digits):
         return value
     else:
         return str(value).zfill(len(str(value))+1) #IF IT IS A '080' NUMBER THEN PAD IT WITH ON ZERO BASED ON THE LENGTH OF THE THE VALUE, THAT IS WHY IT IS FIRST CONVERTED TO A STRING AND THEN WE GET THE LENGTH OF IT AFTER.
+
+@register.filter(name='replace_state')
+def replace_state(text): 
+
+    #This template tag replaces strings in the template in this case to replace the string "state" in the profile page
+
+    if "state" in text.lower() :
+        text = text.lower().replace("state", "")
+    
+    return text

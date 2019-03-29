@@ -33,7 +33,7 @@
 						{% if user_type == "herdsman" %}
 						<h3 class="widget-user-username">{{collection.surname | title}} {{collection.name | title}}</h3>
             <h6 class="widget-user-desc detail">Registered Herdsman</h6>
-            <h6 class="widget-user-desc detail">{{collection.state | title}} State</h6>
+            <h6 class="widget-user-desc detail">{{collection.state | replace_state | title}} State</h6>
             <h6 class="widget-user-desc detail">{{collection.phone | lead_zero:"1" }}</h6>
 						{% endif %}
 						{% if user_type == "farmer" %}

@@ -24,7 +24,7 @@ def index(request):
     herdsmen = Herdsman.objects.all().count()
     farmers = Farmland.objects.all().count()
     states = Herdsman.objects.values_list('state', flat=True).count()#get unique states from herdsmen object
-    print(herdsmen, farmers, states)
+    # print(herdsmen, farmers, states)
     page = 'index'
     return render(request, 'resolute/main/index.html', {'posts':collections, 'page': page, 'total_farmers': farmers, 'total_states': states, 'total_herdsmen':herdsmen, 'incidents':incidents})
 
@@ -78,7 +78,7 @@ def locationpost(request):
     formatedDate = lagos.strftime("%Y-%m-%d %H:%M:%S")
 
     if request.method == 'POST':    
-        print('carrying out test')
+        # print('carrying out test')
         reqPOST = (json.loads(request.body))
         cleaned_json_post = dict(reqPOST['resource'][0])
 
@@ -164,7 +164,7 @@ def get_lat_lng(request, id):
         lng = target.lng
 
         name = target.name
-        print(name)
+        # print(name)
     
     except:
         target = Farmland.objects.get(id = id) #for filtering get just one customer 
@@ -194,8 +194,8 @@ def check_panic(request):
 #RESOLVE PANIC 
 @csrf_exempt
 def resolve_panic(request):
-    print(request.body)
-    print(json.loads(request.body))
+    # print(request.body)
+    # print(json.loads(request.body))
     response = json.loads(request.body)
     incident = Incident.objects.get(id = response['data']['incident_id'])
     user = User.objects.get(id = incident.user_id)
@@ -239,7 +239,7 @@ def check_distance(old_coord, new_coord):
     c = a **2 + b **2 #hypothenus as distance between two points
 
     c = math.sqrt(c)
-    # print(c)
+    # # print(c)
     # 0.0009 = "100m"
     # 0.009 = "1km"
     if c >= 0.00001:
@@ -257,7 +257,7 @@ def get_latlng(request, username):
         farmland = Farmland.objects.get(user = user.id)
         bounds = Bounds.objects.filter(farmland = farmland)
 
-        print(len(bounds))
+        # print(len(bounds))
         for location in bounds:
 
             point = [location.lat, location.lng]
@@ -319,7 +319,7 @@ def create_panic(request):
     try:
         if user_type == "farmer" or user_type2 == "farmer":
             user = User.objects.get(username = username)
-            print(user)
+            # print(user)
             logged_user =Farmland.objects.get(user = user.id)
             session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
@@ -337,7 +337,7 @@ def create_panic(request):
 
         elif user_type == "herdsman" or user_type == "herdsman":
             user = User.objects.get(username = username)
-            print(user)
+            # print(user)
             logged_user =Herdsman.objects.get(user = user.id)
             session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
@@ -441,7 +441,7 @@ def profile_page(request, target_id, is_farmer):
 
         user = User.objects.get(incident = target_id) 
         collection = Herdsman.objects.get(user = user.id) 
-        print(collection.name)
+        # print(collection.name)
 
     elif user_type == 'farmer' :
 
