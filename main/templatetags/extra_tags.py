@@ -17,9 +17,10 @@ def lead_zero(value, desired_digits):
 @register.filter(name='replace_state')
 def replace_state(text): 
 
-    #This template tag replaces strings in the template in this case to replace the string "state" in the profile page
+    #This template tag replaces strings in the template in this case to replace the string "state" in the profile page.
 
-    if "state" in text.lower() :
+    if "state" in text.lower():
         text = text.lower().replace("state", "")
     
+
     return text

@@ -39,7 +39,7 @@
 						{% if user_type == "farmer" %}
 						<h3 class="widget-user-username">{{collection.full_name | title}}</h3>
 						<h6 class="widget-user-desc detail">Registered Farmer</h6>
-            <h6 class="widget-user-desc detail">{{collection.state | title}} State</h6>
+            <h6 class="widget-user-desc detail">{{collection.state | replace_state | title}} State</h6>
             <h6 class="widget-user-desc detail">{{collection.phone }}</h6>
 						{% endif %}
 				   </div>
