@@ -23,7 +23,7 @@ const user_id = document.getElementById("id").innerHTML;
     pos = [result.lat,  result.lng]
     latlng = new google.maps.LatLng(pos[0],pos[1]);
     let myOptions = {
-        zoom: 20,
+        zoom: 16,
         center: latlng,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
