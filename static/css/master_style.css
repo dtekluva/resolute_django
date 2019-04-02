@@ -3375,12 +3375,12 @@ input[type="color"] {
 /*google map Page*/
 .gmaps,
 .gmaps-panaroma {
-    height: 300px;
+    height: 62vh;
 }
 
 .gmaps,
 .gmaps-panaroma {
-    height: 300px;
+    height: 62vh;
     background: #f2f4f8;
     border-radius: 3px;
 }
@@ -3416,6 +3416,12 @@ input[type="color"] {
     border-left: 16px solid transparent;
     border-right: 16px solid transparent;
     border-bottom: 16px solid #9400D3;
+}
+
+@media (max-width:768px) {
+  .gmaps,.gmaps-panaroma {
+    height: 42vh;
+}
 }
 
 /*wizard*/
