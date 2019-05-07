@@ -106,7 +106,7 @@ def locationpost(request): #POST FROM MINI DEVICES DIFFERENT FROM MOBILEE PHONE 
         temporary_target.save()
 
         #CREATE NEW PANIC INCIDENT
-        new_incident = Incident(user =temporary_target.user, details = "No details", lat = lat, lng = lng, name ="{} {}".format(temporary_target.name, temporary_target.surname ), is_farmer = True, location =temporary_target.community)
+        new_incident = Incident(user =temporary_target.user, details = "No details", lat = lat, lng = lng, name = temporary_target.full_name, is_farmer = True, location =temporary_target.community)
         new_incident.save()
 
         if lat != '0' and lng != '0' :
