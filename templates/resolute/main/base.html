@@ -273,6 +273,9 @@
       {% if page != 'index' %} 
         <script src="{%  static "jquery-activmap/js/markermove.js" %}"></script> 
       {% endif %}
+      {% if page == 'map' %} 
+        <script src="{%  static "jquery-activmap/js/device_move.js" %}"></script> 
+      {% endif %}
       <script src="{%  static "jquery-activmap/js/panic.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/switch_panic.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/notify.js" %}"></script> 

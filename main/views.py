@@ -71,33 +71,45 @@ def herdsmen(request):
 
 
 @csrf_exempt
-def locationpost(request):
+def locationpost(request): #POST FROM MINI DEVICES DIFFERENT FROM MOBILEE PHONE POST
 # Create your views here.
+    print(request.body)
     tz = pytz.timezone('Africa/Lagos')
     lagos = datetime.now(tz)
     formatedDate = lagos.strftime("%Y-%m-%d %H:%M:%S")
 
-    if request.method == 'POST':    
+    if request.method == 'POST':
         # print('carrying out test')
-        reqPOST = (json.loads(request.body))
-        cleaned_json_post = dict(reqPOST['resource'][0])
+        try:
+            reqPOST = (json.loads(request.body))
+            cleaned_json_post = dict(reqPOST['resource'][0])
+        except:
+            reqPOST = json.loads(ast.literal_eval(str(request.body).replace('\\', '')))
+            cleaned_json_post = dict(reqPOST['resource'][0])
 
-        devid = cleaned_json_post["devid"] 
+        devid = cleaned_json_post["devid"]
         time  = cleaned_json_post["time"]
         etype = cleaned_json_post["etype"]
         engine = cleaned_json_post["engine"]
         lat = cleaned_json_post["lat"]
         lng = cleaned_json_post["lon"]
         vbat = cleaned_json_post["vbat"]
-        speed = cleaned_json_post["speed"][0:5]
+        speed = cleaned_json_post["speed"][0:4]
         pint = cleaned_json_post["pInt"]
 
-                
+        #Temporary fix remove later
+        clean_address = helpers.get_address(lat,lng)
+        temporary_target = Farmland.objects.get(phone = "08035058587")
+        temporary_target.lng =lng
+        temporary_target.lat =lat
+        temporary_target.save()
+
         if lat != '0' and lng != '0' :
             clean_address = helpers.get_address(lat,lng)
             address = clean_address['address']
             state = clean_address['state']
             try:
+                #07036188527
                 #GET CORRESPONDING HERDSMAN OBJECT
                 herdsman = Herdsman.objects.get(userid = devid)
                 herdsman.lng = lng
@@ -130,8 +142,8 @@ def locationpost(request):
             last_collection.save()
 
 
-    
-            return HttpResponse(json.dumps('Added post to device id {}, name {} '.format(devid, herdsman.name)))   
+
+            return HttpResponse(json.dumps('Added post to device id {}, name {} '.format(devid, herdsman.name)))
 
     return HttpResponse(json.dumps({'Success' : 'success'}))
 
@@ -139,7 +151,7 @@ def locationpost(request):
 def post_is_too_old(new_post_time, old_post):
     lastlocation = old_post
     last_post_in_seconds = lastlocation.date.timestamp()
-    
+
     time_difference = (new_post_time.timestamp() - last_post_in_seconds)/60  #CONVERT SECONDS TO MINUTES
 
     if time_difference > settings.POSTINTERVAL :
@@ -147,10 +159,10 @@ def post_is_too_old(new_post_time, old_post):
     else :
         return False
 
-    
+
 def check(request, slug):
 
-    herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer 
+    herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer
     herdsmen = Herdsman.objects.filter(slug = slug) # for iteration
     locations = serializers.serialize("json", list(chain(Location.objects.filter(herdsman_id = herdsman.id).order_by('id'), herdsmen)) )
 
@@ -159,15 +171,15 @@ def check(request, slug):
 def get_lat_lng(request, id):
 
     try:
-        target = Herdsman.objects.get(id = id) #for filtering get just one customer 
+        target = Herdsman.objects.get(id = id) #for filtering get just one customer
         lat = target.lat
         lng = target.lng
 
         name = target.name
         # print(name)
-    
+
     except:
-        target = Farmland.objects.get(id = id) #for filtering get just one customer 
+        target = Farmland.objects.get(id = id) #for filtering get just one customer
         lat = target.lat
         lng = target.lng
 
@@ -176,7 +188,7 @@ def get_lat_lng(request, id):
 def collection_check(request, id):
 
     collection = Collection.objects.get(id = id)
-    herdsman = Herdsman.objects.get(id = collection.herdsman.id) #for filtering get just one customer 
+    herdsman = Herdsman.objects.get(id = collection.herdsman.id) #for filtering get just one customer
     herdsmen = Herdsman.objects.filter(id = collection.herdsman.id) # for iteration
     locations = serializers.serialize("json", list(Location.objects.filter(collection_id = collection.id).order_by('id')))
 
@@ -191,7 +203,7 @@ def check_panic(request):
     return HttpResponse(panicking)
 
 
-#RESOLVE PANIC 
+#RESOLVE PANIC
 @csrf_exempt
 def resolve_panic(request):
     # print(request.body)
@@ -206,12 +218,12 @@ def resolve_panic(request):
         target = Farmland.objects.get(user_id = user.id)
         target.is_panicking = False
         target.save()
-    
+
     except:
         target = Herdsman.objects.get(user_id = user.id)
         target.is_panicking = False
         target.save()
-        
+
     return HttpResponse(json.dumps(response))
 
 @login_required
@@ -222,9 +234,9 @@ def track(request, slug):
 @login_required
 def mapping(request, slug):
 
-    herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer 
+    herdsman = Herdsman.objects.get(slug = slug) #for filtering get just one customer
     page = 'map'
-    
+
     return render(request, 'resolute/main/map.html', {"herdsman":herdsman, 'slug':slug,  'page': page})
 
 @login_required
@@ -244,7 +256,7 @@ def check_distance(old_coord, new_coord):
     # 0.009 = "1km"
     if c >= 0.00001:
         return True
-    
+
     else:
         return False
 
@@ -269,7 +281,7 @@ def get_latlng(request, username):
         response = {"response":"success","data":{"bounds":bounds_list, "start_latlng":start_latlng, "end_latlng":end_latlng}, 'message': 'user {}'.format(farmland), }
 
         return HttpResponse(json.dumps(response))
-        
+
     except :
         response = {"response":"Failed","data":bounds_list, "message": "user not found" }
 
@@ -305,7 +317,7 @@ def post_latlng(request):
                 farmland.save()
             return HttpResponse(json.dumps({"response":"success", "message": "Added bound to {}".format(farmland.user),  'auth_keys': {'session_token': session.token}}))
     except:
-        return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+        return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' }))
 
 @csrf_exempt
 def create_panic(request):
@@ -332,7 +344,7 @@ def create_panic(request):
                     #CREATE NEW PANIC INCIDENT
                     new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
                     new_incident.save()
-                    
+
                     return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user),  'auth_keys': {'session_token': session.token}}))
 
         elif user_type == "herdsman" or user_type == "herdsman":
@@ -352,11 +364,11 @@ def create_panic(request):
                     new_incident.save()
 
                     return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user),  'auth_keys': {'session_token': session.token}}))
-            
-                
+
+
     except :
-        
-        return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+
+        return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' }))
 
 def resolve_panic_mobile():
     pass
@@ -367,8 +379,8 @@ def get_client_data(request):
     new_request = json.loads(request.body)
     username = new_request['data']['username']
     auth_data = new_request['auth']
-    user_type = new_request['user_type']  
-        
+    user_type = new_request['user_type']
+
     user = User.objects.get(username = username)
     session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
@@ -378,19 +390,19 @@ def get_client_data(request):
 
                 farmland = Farmland.objects.get(user = user.id)
 
-            
+
                 return HttpResponse(json.dumps({"response":"success", "data": {"name":farmland.full_name, "phone":farmland.phone, "address":farmland.community},  'auth_keys': {'session_token': session.token}}))
 
             if user_type == "herdsman":
 
                 herdsman = Herdsman.objects.get(user = user.id)
 
-            
-                return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
-            
 
-    
-    return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+                return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
+
+
+
+    return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' }))
 
 
 @csrf_exempt
@@ -401,8 +413,8 @@ def recurring_gps_post(request):
     lat = new_request['data']['lat']
     lng = new_request['data']['lng']
     auth_data = new_request['auth']
-    user_type = new_request['user_type']  
-        
+    user_type = new_request['user_type']
+
     user = User.objects.get(username = username)
     session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
@@ -414,7 +426,7 @@ def recurring_gps_post(request):
                 farmland.lat = lat
                 farmland.lng = lng
                 farmland.save()
-            
+
                 return HttpResponse(json.dumps({"response":"success", "data": {"name":farmland.full_name, "phone":farmland.phone, "address":farmland.community},  'auth_keys': {'session_token': session.token}}))
 
             if user_type == "herdsman":
@@ -424,30 +436,30 @@ def recurring_gps_post(request):
                 herdsmnan.lng = lng
                 herdsmnan.save()
 
-            
-                return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
-            
 
-    
-    return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' })) 
+                return HttpResponse(json.dumps({"response":"success", "data": {"name":(herdsman.name +" "+ herdsman.surname), "phone":herdsman.phone, "address":herdsman.address, "no_cattle":herdsman.no_of_cattle},  'auth_keys': {'session_token': session.token}}))
+
+
+
+    return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' }))
 
 
 
 def profile_page(request, target_id, is_farmer):
 
-    user_type  = 'farmer' if eval(is_farmer)  else 'herdsman'     
+    user_type  = 'farmer' if eval(is_farmer)  else 'herdsman'
 
     if user_type == 'herdsman' :
 
-        user = User.objects.get(incident = target_id) 
-        collection = Herdsman.objects.get(user = user.id) 
+        user = User.objects.get(incident = target_id)
+        collection = Herdsman.objects.get(user = user.id)
         # print(collection.name)
 
     elif user_type == 'farmer' :
 
-        user = User.objects.get(incident = target_id) 
-        collection = Farmland.objects.get(user = user.id) 
+        user = User.objects.get(incident = target_id)
+        collection = Farmland.objects.get(user = user.id)
 
     page = 'profile'
-    
+
     return render(request, 'resolute/main/profile.html', {'page': page, 'user_type':user_type, 'collection':collection})
