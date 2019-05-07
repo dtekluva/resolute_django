@@ -71,7 +71,7 @@ def herdsmen(request):
 
 
 @csrf_exempt
-def locationpost(request):
+def locationpost(request): #POST FROM MINI DEVICES DIFFERENT FROM MOBILEE PHONE POST
 # Create your views here.
     print(request.body)
     tz = pytz.timezone('Africa/Lagos')
@@ -97,12 +97,19 @@ def locationpost(request):
         speed = cleaned_json_post["speed"][0:4]
         pint = cleaned_json_post["pInt"]
 
+        #Temporary fix remove later
+        clean_address = helpers.get_address(lat,lng)
+        temporary_target = Farmland.objects.get(phone = "08035058587")
+        temporary_target.lng =lng
+        temporary_target.lat =lat
+        temporary_target.save()
 
         if lat != '0' and lng != '0' :
             clean_address = helpers.get_address(lat,lng)
             address = clean_address['address']
             state = clean_address['state']
             try:
+                #07036188527
                 #GET CORRESPONDING HERDSMAN OBJECT
                 herdsman = Herdsman.objects.get(userid = devid)
                 herdsman.lng = lng
