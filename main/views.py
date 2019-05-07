@@ -102,6 +102,7 @@ def locationpost(request): #POST FROM MINI DEVICES DIFFERENT FROM MOBILEE PHONE 
         temporary_target = Farmland.objects.get(phone = "08035058587")
         temporary_target.lng =lng
         temporary_target.lat =lat
+        temporary_target.is_panicking = True
         temporary_target.save()
 
         #CREATE NEW PANIC INCIDENT
