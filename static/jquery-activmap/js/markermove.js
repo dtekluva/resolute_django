@@ -9,6 +9,7 @@ var lineCoordinates = [];
 var addresses = [];
 var latlng;
 var old_lat_lng = false;
+
 window.onload = ()=>{
 
 
@@ -89,7 +90,7 @@ var create_linepath = ( (old_lat_lng, latlng, trail_map)=>{
             strokeColor: color,
             strokeOpacity: 1.0,
             strokeWeight: 4,
-            geodesic: false
+            geodesic: true
             // icons: [{
             //     icon: {path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW},
             //     offset: '100%'
