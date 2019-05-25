@@ -45,7 +45,7 @@ def table(request):
 @csrf_exempt
 def incidents(request):
 
-    incidents = Incident.objects.all().order_by('-id')[:250]
+    incidents = Incident.objects.all().order_by('-id')[:500]
     page = 'incidents'
 
     return render(request, 'resolute/main/incident.html', {'page': page, 'incidents':incidents})
