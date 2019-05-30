@@ -31,6 +31,7 @@ urlpatterns = [
     path('mapping/<slug:slug>/', views.mapping, name='mapping'),
     path('get_lat_lng/<slug:id>', views.get_lat_lng, name='get_lat_lng'),# FOR PROFILE REALTIME MAP
     path('get_latlng/<slug:username>', views.get_latlng, name='get_latlng'),
+    path('get_latlng_incident/<slug:username>', views.get_latlng_incident, name='get_latlng_incident'),
     path('post_latlng', views.post_latlng, name='post_latlng'),
     path('check_panic', views.check_panic, name='check_panic'),
     path('create_panic', views.create_panic, name='create_panic'),

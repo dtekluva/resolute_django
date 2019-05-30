@@ -91,14 +91,15 @@
 					<div class="col-sm-4 border-right">
 					  <div class="description-block">
             {% if collection.is_mapped %}
-            <h5 class="description-header">Mapped</h5>
+						<h5 class="description-header">Mapped</h5>
+						
             {% endif %}
             {% if not collection.is_mapped %}
 						<span class="description-text">Unmapped</span>
             {% endif %}
-					  </div>
-					  <!-- /.description-block -->
 					</div>
+					<!-- /.description-block -->
+				</div>
 					<!-- /.col -->
 					<div class="col-sm-4">
 					  <div class="description-block">
@@ -163,6 +164,7 @@
     <!-- /.content -->
   </div>
 	<div hidden id = "id" >{{collection.id}}</div>
+	<div  id = "username" >{{collection.user.username}}</div>
 	<!-- /.content-wrapper -->
 
 	
