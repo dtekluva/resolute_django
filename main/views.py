@@ -292,6 +292,38 @@ def get_latlng(request, username):
         return HttpResponse(json.dumps(response))
 
 
+
+#HANDLE BOUNDS POST FROM MOBILE
+
+def get_latlng_incident(request, username):
+    incidents_list = []
+  
+    try:
+        user = User.objects.get(username = username)
+        # farmland = Farmland.objects.get(user = user.id)
+        # bounds = Bounds.objects.filter(farmland = farmland)
+        user_incidents = Incident.objects.filter(user = user).order_by("-id")[:300]
+
+        # print(len(bounds))
+        for location in user_incidents:
+
+            point = [location.lat, location.lng]
+            incidents_list.append(point)
+
+        start_latlng = [user_incidents[0].lat, user_incidents[0].lng]
+        end_latlng = [user_incidents[len(user_incidents)-1].lat, user_incidents[len(user_incidents)-1].lng]
+
+        response = {"response":"success","data":{"user_incidents":incidents_list, "start_latlng":start_latlng, "end_latlng":end_latlng}, 'message': f'user {user}', }
+
+        return HttpResponse(json.dumps(response))
+
+    except :
+        response = {"response":"Failed","data":incidents_list, "message": "user not found" }
+
+        return HttpResponse(json.dumps(response))
+
+
+
 @csrf_exempt
 #POST LAT_LNG SERIES FOR BOUNDS PURPOSES DIFFERENT FROM PANIC
 def post_latlng(request):

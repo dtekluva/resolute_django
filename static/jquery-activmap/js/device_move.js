@@ -1,6 +1,4 @@
 // host = 'http://localhost:8000/';
-console.log("hellloooo");
-alert("hellloooo");
 var host = window.location.hostname == 'localhost'
     ? 'http://localhost:8000/'
     : 'http://' + window.location.hostname + '/';
