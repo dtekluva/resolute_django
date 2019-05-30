@@ -264,7 +264,7 @@ def check_distance(old_coord, new_coord):
     else:
         return False
 
-#HANDLE BOUNDS POST FROM MOBILE
+
 
 def get_latlng(request, username):
     bounds_list = []
@@ -293,7 +293,6 @@ def get_latlng(request, username):
 
 
 
-#HANDLE BOUNDS POST FROM MOBILE
 
 def get_latlng_incident(request, username):
     incidents_list = []
@@ -302,13 +301,15 @@ def get_latlng_incident(request, username):
         user = User.objects.get(username = username)
         # farmland = Farmland.objects.get(user = user.id)
         # bounds = Bounds.objects.filter(farmland = farmland)
-        user_incidents = Incident.objects.filter(user = user).order_by("-id")[:300]
-
+        user_incidents = Incident.objects.filter(user = user).order_by("id")[:5000]
+        old_latlng = [user_incidents[0].lat, user_incidents[0].lng]
         # print(len(bounds))
         for location in user_incidents:
 
             point = [location.lat, location.lng]
-            incidents_list.append(point)
+
+            if check_distance(old_latlng, point):
+                incidents_list.append(point)
 
         start_latlng = [user_incidents[0].lat, user_incidents[0].lng]
         end_latlng = [user_incidents[len(user_incidents)-1].lat, user_incidents[len(user_incidents)-1].lng]
