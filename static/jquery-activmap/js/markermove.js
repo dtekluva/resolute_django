@@ -68,7 +68,7 @@ window.onload = ()=>{
                         old_lat_lng = latlng;
                     },0.5)
                 });
-            }, 2000);
+            }, 1000);
     });
 
 
@@ -99,10 +99,10 @@ window.onload = ()=>{
 
     var draw_Old_Line_Path = ((result)=>{
 
-        let old_lat_lng = new google.maps.LatLng(result.data.user_incidents[0][0], result.data.user_incidents[0][0]);
+        // console.log(result)
+        let old_lat_lng = new google.maps.LatLng(result.data.user_positions[0][0], result.data.user_positions[0][0]);
 
-        console.log(result.data.user_incidents)
-        result.data.user_incidents.forEach((element)=>{
+        result.data.user_positions.forEach((element)=>{
             if (true) {
 
                 latlng = new google.maps.LatLng(element[0], element[1]);
