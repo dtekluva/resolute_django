@@ -146,3 +146,10 @@ class Positions(models.Model): #COORDINATES AS USER MOVES
 
     class Meta:
         ordering = ('date',)
+
+class Message(models.Model):
+     sender      = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender")
+     reciever    = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reciever")
+     msg_content = models.TextField(default="", blank= True, null= True)
+     created_at  = models.DateTimeField(auto_now_add=True)
+     read        = models.BooleanField(default = False)
