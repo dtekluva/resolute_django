@@ -123,3 +123,26 @@ class Incident(models.Model):
     is_farmer   = models.BooleanField(default = False)
     is_herdsman = models.BooleanField(default = False)
     is_resolved     = models.BooleanField(default = False)
+
+
+class Positions(models.Model): #COORDINATES AS USER MOVES
+    user     = models.ForeignKey(User, on_delete=models.CASCADE)
+    incident = models.ForeignKey(Incident, on_delete=models.CASCADE)
+    lng      = models.FloatField(max_length=100,blank=True, default=0)
+    lat      = models.FloatField(max_length=100,blank=True, default=0)
+    speed    = models.FloatField(max_length=100,blank=True, default=0)
+    accuracy = models.FloatField(max_length=100,blank=True, default=0)
+    location = models.TextField(default="", blank= True, null= True)
+    date     = models.DateTimeField(auto_now_add=True)
+    name     = models.CharField(max_length=60,unique=False, null = True, blank=True )
+    details  = models.TextField(max_length=200, default="", null = True, blank=True)
+    is_active   = models.BooleanField(default = True)
+    is_farmer   = models.BooleanField(default = False)
+    is_herdsman = models.BooleanField(default = False)
+    is_resolved     = models.BooleanField(default = False)
+
+    def __str__(self):              # __unicode__ on Python 2
+        return str(self.lat) + str(self.lng)
+
+    class Meta:
+        ordering = ('date',)

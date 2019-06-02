@@ -1,0 +1,106 @@
+{% extends "resolute/main/base.html" %} {% load static %} 
+
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>Pushed Logs</h1>
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="#"><i class="fa fa-dashboard"></i> Home</a>
+			</li>
+			<li class="breadcrumb-item"><a href="#">Users</a></li>
+			<li class="breadcrumb-item active">Logs</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		
+		<!-- REGISTERED USERS TABLE STARTS HERE -->
+		<div class="row">			
+			
+			
+			<!-- /.col -->				
+			<div class="col-12 col-lg-12">
+				
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">All incidents ever occured</h3>
+              <h6 class="box-subtitle"></h6>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            <div class="table-responsive">
+              <table id="example" class="table table-bordered table-hover table-display nowrap margin-top-10 w-p100 ">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Occupation</th>
+                  <th>Lat, Lng</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Resolved</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                {% for incident in logs %}
+                <tr>
+                  <td>{{incident.id}}</td>
+				  <td><a href="../../profile_page/{{incident.id}}/{{incident.is_farmer}}">{{incident.name | title}}</a></td>
+					{% if incident.is_farmer %}
+					<td><a href="#">Farmer</a></td>
+					{% endif %}
+					{% if incident.is_herdsman %}
+					<td><a href="#">herdsman</a></td>
+					{% endif %}
+                  <td>{{incident.lat}}, {{incident.lng}}</td>
+                  <td>{{incident.location}}</td>
+                  <td>{{incident.date}}</td>
+                  <td>
+					{% if not incident.is_resolved %}
+					<label class="switch switch-border switch-info">
+						<input onchange="make_alert(this, '{{incident.id}}')"  type="checkbox" >
+						<span class="switch-indicator"></span>
+						<span class="switch-description"></span>
+					  </label>
+					  {% endif %}
+					{% if incident.is_resolved %}
+					<label class="switch switch-border switch-info">
+						<input onchange="make_alert(this, '{{incident.id}}')" type="checkbox" checked >
+						<span class="switch-indicator"></span>
+						<span class="switch-description"></span>
+					  </label>
+					  {% endif %}
+				  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            </div>
+            </div>
+          </div>
+      </div>
+			<!-- /.col -->
+		</div>
+		<!-- <a class="btn btn-app btn-info" href="#">
+			<i class="fa fa-plus"></i> Add User
+		  </a> -->
+
+			<!-- <div  name="csrfmiddlewaretoken">{{csrf_token}}</div> -->
+			{% csrf_token %}
+			
+	</section>
+	<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<script>
+
+
+</script>
+
+{% endblock %}

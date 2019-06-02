@@ -20,6 +20,9 @@
 	
 	<!-- theme style -->
 	<link rel="stylesheet" href="{% static "css/master_style.css" %}">
+
+  <!-- Messaging style -->
+	<link rel="stylesheet" href="{% static "css/messaging.css" %}">
 	
   <!--alerts CSS -->
   <link href= "{% static "assets/vendor_components/sweetalert/sweetalert.css" rel="stylesheet" type="text/css"  %}">
@@ -133,11 +136,15 @@
           </a>
         </li>
       
-	
-		
-        <li class="{% if page == 'table' %}active {% endif %}">
+        <!-- <li class="{% if page == 'table' %}active {% endif %}">
           <a href="/table">
             <i class="fa fa-table"></i> <span>Reports</span>
+          </a>
+        </li>		 -->
+
+        <li class="{% if page == 'logs' %}active {% endif %}">
+          <a href="/logs">
+            <i class="fa fa-table"></i> <span>Logs</span>
           </a>
         </li>		
 
@@ -270,14 +277,15 @@
       <!-- google maps api -->
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvvVEqrwQt8LmAzlB99zmrwWR3vxPDs8w"></script>
       <script src="{%  static "jquery-activmap/js/script.js" %}"></script> 
+      <script src="{%  static "jquery-activmap/js/messaging.js" %}"></script> 
       {% if page != 'index' %} 
         <script src="{%  static "jquery-activmap/js/markermove.js" %}"></script> 
       {% endif %}
       {% if page == 'map' %} 
         <script src="{%  static "jquery-activmap/js/device_move.js" %}"></script> 
         {% endif %}
-
-        <script src="{%  static "jquery-activmap/js/panic.js" %}"></script> 
+      
+      <script src="{%  static "jquery-activmap/js/panic.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/switch_panic.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/notify.js" %}"></script> 
       <script src="{%  static "jquery-activmap/js/users_page.js" %}"></script> 
