@@ -6,13 +6,13 @@
 <div class="content-wrapper">
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
-		<h1>Incidents</h1>
+		<h1>Pushed Logs</h1>
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item">
 				<a href="#"><i class="fa fa-dashboard"></i> Home</a>
 			</li>
 			<li class="breadcrumb-item"><a href="#">Users</a></li>
-			<li class="breadcrumb-item active">Incidents</li>
+			<li class="breadcrumb-item active">Logs</li>
 		</ol>
 	</section>
 
@@ -48,7 +48,7 @@
               </thead>
               <tbody>
                 
-                {% for incident in incidents %}
+                {% for incident in logs %}
                 <tr>
                   <td>{{incident.id}}</td>
 				  <td><a href="../../profile_page/{{incident.id}}/{{incident.is_farmer}}">{{incident.name | title}}</a></td>
@@ -91,15 +91,6 @@
 			<i class="fa fa-plus"></i> Add User
 		  </a> -->
 
-		  <div class="clearfix">
-			  <button onclick="show_form(this)" class="btn btn-social btn-info mb-5">
-				<i class="fa fa-plus"></i> Add New User
-			  </button>
-			  <button onclick="hide_form(this)" class="btn btn-social btn-info mb-5">
-				<i class="fa fa-arrow-circle-down"></i> Hide Form
-			  </button>
-		  
-			</div>
 			<!-- <div  name="csrfmiddlewaretoken">{{csrf_token}}</div> -->
 			{% csrf_token %}
 			

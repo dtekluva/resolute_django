@@ -42,6 +42,14 @@ def table(request):
     page = 'table'
     return render(request, 'resolute/main/table.html', {'posts':locations, 'page': page})
 
+@login_required
+def logs(request):
+
+    logs = Positions.objects.all().order_by('-id')[:2000]
+    print(logs)
+    page = 'logs'
+    return render(request, 'resolute/main/logs.html', {'logs':logs, 'page': page})
+
 @csrf_exempt
 def incidents(request):
 

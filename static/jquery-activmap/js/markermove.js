@@ -173,3 +173,8 @@ lineCoordinates.push({"lat":element.fields.lat, "lng":element.fields.lng})//add 
 
     linePath.setMap(trail_map);
     });
+
+
+
+
+      
