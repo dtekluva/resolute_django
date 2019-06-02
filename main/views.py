@@ -370,104 +370,108 @@ def create_panic(request):
     data        = new_request['data']
     user_type   = new_request['user_type']
 
-    # try:
-    user = User.objects.get(username = username)
-    #Get the last inicident and check to see if dashboard has resolved panic
-    last_incident = Incident.objects.filter(user = user.id).order_by("-id")[0] 
+    try:
+        user = User.objects.get(username = username)
+        #Get the last inicident and check to see if dashboard has resolved panic
+        last_incident = Incident.objects.filter(user = user.id).order_by("-id")[0] 
 
-    if user_type == "farmer":
-        #user = User.objects.get(username = username) #REALISED THAT THIS IS A REDUNDANT CALL THERE IS NO REAL NEAD TO RECHECK FOR THE USER AS BOTH FARMERS AND HERDS MEN ARE TIED TO USER MODELS HENCE ON
+        if user_type == "farmer":
+            #user = User.objects.get(username = username) #REALISED THAT THIS IS A REDUNDANT CALL THERE IS NO REAL NEAD TO RECHECK FOR THE USER AS BOTH FARMERS AND HERDS MEN ARE TIED TO USER MODELS HENCE ON
 
-        logged_user = Farmland.objects.get(user = user.id)
-        session     = Session.objects.get(token = auth_data['session_token'], is_active = True)
+            logged_user = Farmland.objects.get(user = user.id)
+            session     = Session.objects.get(token = auth_data['session_token'], is_active = True)
 
-        if session._authenticate(auth_data):
+            if session._authenticate(auth_data):
+
+                    #Check to see if dashboard has resolved panic
+                    if not last_incident.is_resolved :#if dashboard has not resolved panic 
+                    #Note that is_active is being used as a cue to stop the mobile app from continuing to panic
+                        logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
+                        logged_user.is_panicking = True
+                        logged_user.save()
+
+                        #CREATE NEW PANIC POSITION
+                        new_position = Positions(user =logged_user.user, incident = last_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
+
+                        last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
+
+                        if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):#JUST TO AVOID SAVING SIMILAR POSITIONS
+                            new_position.save()
+
+                        return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user), "terminate_panic": False,  'auth_keys': {'session_token': session.token}}))
+                    
+                    elif not last_incident.is_active and last_incident.is_resolved:#CREATE NEW INCIDENT IF OLD ONE IS CLOSED
+                        logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
+                        logged_user.is_panicking = True
+                        logged_user.save()
+
+                        #CREATE NEW INCIDENT
+                        new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
+                        new_incident.save()
+
+                        #CREATE NEW PANIC POSITION
+                        new_position = Positions(user =logged_user.user, incident = new_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
+
+                        last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
+
+                        if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):
+                            new_position.save()
+
+                        return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user), "terminate_panic": False,  'auth_keys': {'session_token': session.token}}))
+                        
+                        
+                    else:
+                        last_incident.is_active = False
+                        last_incident.save()
+                        return HttpResponse(json.dumps({"response":"success", "message": "{} panic has been resolved.".format(logged_user.user), "terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
+
+
+        elif user_type == "herdsman":
+            # user = User.objects.get(username = username) #REALISED THAT THIS IS A REDUNDANT CALL THERE IS NO REAL NEAD TO RECHECK FOR THE USER AS BOTH FARMERS AND HERDS MEN ARE TIED TO USER MODELS HENCE ONE USERE CALL CAN WORK FOR BOTH
+
+            logged_user =Herdsman.objects.get(user = user.id)
+            session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+
+            if session._authenticate(auth_data):
 
                 #Check to see if dashboard has resolved panic
-                if not last_incident.is_resolved :#if dashboard has not resolved panic 
-                #Note that is_active is being used as a cue to stop the mobile app from continuing to panic
-                    logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
-                    logged_user.is_panicking = True
-                    logged_user.save()
+                    if last_incident.is_resolved :#if dashboard has not resolved panic 
+                    #Note that is_active is being used as a cue to stop the mobile app from continuing to panic
+                        logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
+                        logged_user.is_panicking = True
+                        logged_user.save()
 
-                    #CREATE NEW PANIC POSITION
-                    new_position = Positions(user =logged_user.user, incident = last_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
-
-                    last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
-                    print([last_position[0].lat, last_position[0].lng] , [new_position.lat, new_position.lng])
-                    if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):
+                        #CREATE NEW PANIC POSITION
+                        new_position = Positions(user =logged_user.user, incident = last_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
                         new_position.save()
 
-                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user), "terminate_panic": False,  'auth_keys': {'session_token': session.token}}))
-                
-                elif not last_incident.is_active and last_incident.is_resolved:#CREATE NEW INCIDENT IF OLD ONE IS CLOSED
-                    logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
-                    logged_user.is_panicking = True
-                    logged_user.save()
-
-                    #CREATE NEW INCIDENT
-                    new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
-                    new_incident.save()
-
-                    #CREATE NEW PANIC POSITION
-                    new_position = Positions(user =logged_user.user, incident = new_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
-                    new_position.save()
-
-                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user), "terminate_panic": False,  'auth_keys': {'session_token': session.token}}))
+                        return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user) ,"terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
                     
+                    elif not last_incident.is_active and last_incident.is_resolved:#CREATE NEW INCIDENT IF OLD ONE IS CLOSED:
+                        logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
+                        logged_user.is_panicking = True
+                        logged_user.save()
+
+                        #CREATE NEW PANIC INCIDENT
+                        new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
+                        new_incident.save()
                     
-                else:
-                    last_incident.is_active = False
-                    last_incident.save()
-                    return HttpResponse(json.dumps({"response":"success", "message": "{} panic has been resolved.".format(logged_user.user), "terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
+                        #CREATE NEW PANIC POSITION
+                        new_position = Positions(user =logged_user.user, incident = last_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
+                        new_position.save()
+
+                        return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user) ,"terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
 
 
-    elif user_type == "herdsman":
-        # user = User.objects.get(username = username) #REALISED THAT THIS IS A REDUNDANT CALL THERE IS NO REAL NEAD TO RECHECK FOR THE USER AS BOTH FARMERS AND HERDS MEN ARE TIED TO USER MODELS HENCE ONE USERE CALL CAN WORK FOR BOTH
+                    else:
 
-        logged_user =Herdsman.objects.get(user = user.id)
-        session  = Session.objects.get(token = auth_data['session_token'], is_active = True)
+                        last_incident.is_active = True
+                        last_incident.save()
 
-        if session._authenticate(auth_data):
-
-            #Check to see if dashboard has resolved panic
-                if last_incident.is_resolved :#if dashboard has not resolved panic 
-                #Note that is_active is being used as a cue to stop the mobile app from continuing to panic
-                    logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
-                    logged_user.is_panicking = True
-                    logged_user.save()
-
-                    #CREATE NEW PANIC POSITION
-                    new_position = Positions(user =logged_user.user, incident = last_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
-                    new_position.save()
-
-                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user) ,"terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
-                
-                elif not last_incident.is_active and last_incident.is_resolved:#CREATE NEW INCIDENT IF OLD ONE IS CLOSED:
-                    logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
-                    logged_user.is_panicking = True
-                    logged_user.save()
-
-                    #CREATE NEW PANIC INCIDENT
-                    new_incident = Incident(user =logged_user.user, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
-                    new_incident.save()
-                
-                    #CREATE NEW PANIC POSITION
-                    new_position = Positions(user =logged_user.user, incident = last_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name ="{} {}".format(logged_user.name, logged_user.surname ) , is_herdsman= True, location =logged_user.address)
-                    new_position.save()
-
-                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user) ,"terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
+                        return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user) ,"terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
 
 
-                else:
-
-                    last_incident.is_active = True
-                    last_incident.save()
-
-                    return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user) ,"terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
-
-
-    # except :
+    except :
 
         return HttpResponse(json.dumps({"response":"failed", 'code':'401', 'message':'unauthorized request, (Bad token)' }))
 
