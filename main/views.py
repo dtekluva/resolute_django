@@ -301,15 +301,16 @@ def get_latlng(request, username):
 
 
 
-def get_latlng_incident(request, username):
+def get_latlng_incident(request, username, incident):
     incidents_list = []
-  
+
     # try:
     user = User.objects.get(username = username)
     # farmland = Farmland.objects.get(user = user.id)
     # bounds = Bounds.objects.filter(farmland = farmland)
-    user_positions = list(Positions.objects.filter(user = user).order_by("id"))
 
+    user_positions = list(Positions.objects.filter(incident_id = incident).order_by("id"))
+    print(user_positions)
     old_latlng = [user_positions[0].lat, user_positions[0].lng]
 
     for location in user_positions:        
@@ -385,7 +386,7 @@ def create_panic(request):
                     #Check to see if dashboard has resolved panic
                     if not last_incident.is_resolved :#if dashboard has not resolved panic 
                     #Note that is_active is being used as a cue to stop the mobile app from continuing to panic
-
+                        print(1)
                         logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
                         logged_user.is_panicking = True
                         logged_user.save()
@@ -397,7 +398,7 @@ def create_panic(request):
                         return HttpResponse(json.dumps({"response":"success", "message": "{} is now panicking".format(logged_user.user), "terminate_panic": False,  'auth_keys': {'session_token': session.token}}))
                     
                     elif not last_incident.is_active and last_incident.is_resolved:#CREATE NEW INCIDENT IF OLD ONE IS CLOSED
-
+                        print(2)
                         logged_user.lat, logged_user.lng = data['lat'], data['lng'] # ADD USER LOCATION OF FARMER TO THE FARMLAND
                         logged_user.is_panicking = True
                         logged_user.save()
@@ -414,7 +415,7 @@ def create_panic(request):
                         
                         
                     else:
-
+                        print(3)
                         last_incident.is_active = False
                         last_incident.save()
                         return HttpResponse(json.dumps({"response":"success", "message": "{} panic has been resolved.".format(logged_user.user), "terminate_panic": True,  'auth_keys': {'session_token': session.token}}))
@@ -561,4 +562,4 @@ def profile_page(request, target_id, is_farmer):
 
     page = 'profile'
 
-    return render(request, 'resolute/main/profile.html', {'page': page, 'user_type':user_type, 'collection':collection})
+    return render(request, 'resolute/main/profile.html', {'page': page, 'user_type':user_type, 'collection':collection, 'incident_id':target_id})

@@ -13,12 +13,12 @@ var old_lat_lng = false;
 window.onload = ()=>{
     const user_id = document.getElementById("id").innerHTML;
     const username = document.getElementById("username").innerHTML;
-
+    const incident_id = document.getElementById("incident_id").innerHTML;
 
     setTimeout(() => {
 
     var promise = $.getJSON(host + "get_lat_lng/" + user_id);
-    var promise_for_old_trail = $.getJSON(host + "get_latlng_incident/" + username);
+    var promise_for_old_trail = $.getJSON(host + "get_latlng_incident/" + username + "/"+ incident_id);
 
     promise.done(function(res) {
         result = res
@@ -100,8 +100,8 @@ window.onload = ()=>{
     var draw_Old_Line_Path = ((result)=>{
 
         // console.log(result)
-        let old_lat_lng = new google.maps.LatLng(result.data.user_positions[0][0], result.data.user_positions[0][0]);
-
+        let old_lat_lng = new google.maps.LatLng(result.data.start_latlng[0], result.data.start_latlng[1]);
+        console.log(result)
         result.data.user_positions.forEach((element)=>{
             if (true) {
 
