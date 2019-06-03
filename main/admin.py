@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from main.models import Herdsman, Location, Bounds, Farmland, Collection, Incident
+from main.models import Herdsman, Location, Bounds, Farmland, Collection, Incident, Positions
 # Register your models here.
 
 
@@ -25,6 +25,9 @@ class CollectionAdmin(admin.ModelAdmin):
 class IncidentAdmin(admin.ModelAdmin):
     list_display = ('user', 'details','date',)
 
+class PositionsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'details','date',)
+
 
 admin.site.register(Herdsman, HerdsmanAdmin)
 admin.site.register(Location, LocationAdmin)
@@ -32,3 +35,4 @@ admin.site.register(Farmland, FarmlandAdmin)
 admin.site.register(Bounds, BoundAdmin)
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(Incident, IncidentAdmin)
+admin.site.register(Positions, PositionsAdmin)

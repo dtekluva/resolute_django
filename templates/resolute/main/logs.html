@@ -43,7 +43,7 @@
                   <th>Lat, Lng</th>
                   <th>Location</th>
                   <th>Date</th>
-                  <th>Resolved</th>
+                  <th>Incident</th>
                 </tr>
               </thead>
               <tbody>
@@ -61,21 +61,8 @@
                   <td>{{incident.lat}}, {{incident.lng}}</td>
                   <td>{{incident.location}}</td>
                   <td>{{incident.date}}</td>
-                  <td>
-					{% if not incident.is_resolved %}
-					<label class="switch switch-border switch-info">
-						<input onchange="make_alert(this, '{{incident.id}}')"  type="checkbox" >
-						<span class="switch-indicator"></span>
-						<span class="switch-description"></span>
-					  </label>
-					  {% endif %}
-					{% if incident.is_resolved %}
-					<label class="switch switch-border switch-info">
-						<input onchange="make_alert(this, '{{incident.id}}')" type="checkbox" checked >
-						<span class="switch-indicator"></span>
-						<span class="switch-description"></span>
-					  </label>
-					  {% endif %}
+                  <td>{{incident.incident}}
+						
 				  </td>
                 </tr>
                 {% endfor %}

@@ -3,10 +3,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from useraccounts.forms import LoginForm
 from django.contrib.auth.models import User
 from useraccounts.models import UserAccount, Token_man, Session
-from main.models import Farmland, Herdsman
+from main.models import Herdsman, Bounds, Location, Farmland, Collection, Incident, Positions
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from useraccounts.helper import create_dummy_incident, create_dummy_position
 import json
 from snippet import helpers
 import ast
@@ -147,8 +148,9 @@ def mobile_register(request):
                 try:
                         name_list = fname.split(' ')
                         new_herdsman = Herdsman(  phone = phone, name = name_list[0], surname = name_list[1], address = community, user_id = new_user.id, state = state, static_state = state, no_of_cattle = livestock_population)
+
                 except:
-                        new_herdsman = Herdsman(   phone = phone, name = fname, surname = "", address = community, user_id = new_user.id, state = state, static_state = state, no_of_cattle = livestock_population)
+                        new_herdsman = Herdsman( phone = phone, name = fname, surname = "", address = community, user_id = new_user.id, state = state, static_state = state, no_of_cattle = livestock_population)
 
                 #add  mobile authentication token                                
                 tokenize = Token_man(new_user)
@@ -157,6 +159,9 @@ def mobile_register(request):
 
                 new_user.set_password(pin + "????")
                 new_user.save()
+
+                new_incident = create_dummy_incident(user = new_user, user_type = "herdsman")
+                create_dummy_position(user = new_user, incident= new_incident, user_type = "herdsman")#create dummy values for position and incident because of algorithm
 
 
                 return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_herdsman.user.username, 'client_token': new_herdsman.token}, "user_type": user_type, 'message':'Registered successfully'}))
@@ -182,6 +187,8 @@ def mobile_register(request):
                 new_user.set_password(pin + "????")
                 new_user.save()
 
+                new_incident = create_dummy_incident(user = new_user, user_type = "farmer")
+                create_dummy_position(user = new_user, incident= new_incident, user_type = "farmer")#create dummy values for position and incident because of algorithm
 
                 return HttpResponse(json.dumps({"response":"success", 'auth_keys': {'client_username': new_farm.user.username, 'client_token': new_farm.token}, "user_type": user_type, 'message':'Registered successfully'}))
 
