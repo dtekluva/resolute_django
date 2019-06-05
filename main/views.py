@@ -35,6 +35,11 @@ def detail_view(request):
 
     return render(request, 'resolute/skin-compact.html', {"herdsman":herdsman})
 
+##maing few changes
+def temp():
+    pass
+
+    
 @login_required
 def table(request):
 
