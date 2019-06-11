@@ -48,7 +48,9 @@
               </thead>
               <tbody>
                 
-                {% for incident in incidents %}
+				{% for incident in incidents %}
+				{% if incident.name != "null" %}
+				
                 <tr>
                   <td>{{incident.id}}</td>
 				  <td><a href="../../profile_page/{{incident.id}}/{{incident.is_farmer}}">{{incident.name | title}}</a></td>
@@ -78,6 +80,7 @@
 					  {% endif %}
 				  </td>
                 </tr>
+                {% endif %}
                 {% endfor %}
               </tbody>
             </table>
