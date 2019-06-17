@@ -1,4 +1,6 @@
 from main.models import Positions, Incident
+from useraccounts.models import UserAccount
+import requests
 
 def create_dummy_incident(user, user_type):
 
@@ -24,3 +26,27 @@ def create_dummy_position(user, incident, user_type):
 
 
     new_position.save()
+
+
+def alert_security(sender_name, sender_location, sender_position):
+    recipients_list = UserAccount.objects.all()
+ 
+    text = ""
+    for recipient in recipients_list:
+        text += f"{recipient.phone},"
+
+    recipients = text[:-1]
+
+    username = "joseph@yourbudgit.com"
+    api_key = "e4b5af86e89730ad30564ac6d12ea45f8031c514"
+    sender  = "RESOLUTE"
+
+    message = f"{sender_name} of {sender_location} just pushed a panic alert. \n See location: http://www.google.com/maps/place/{sender_position.lat},{sender_position.lng}"
+
+
+    url = f"http://api.ebulksms.com:8080/sendsms?username={username}&apikey={api_key}&sender={sender}&messagetext={message}&flash=0&recipients={recipients}"
+
+    response = requests.get(url)
+
+    print(response.text, recipients)
+    print(message)
