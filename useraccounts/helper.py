@@ -28,7 +28,7 @@ def create_dummy_position(user, incident, user_type):
     new_position.save()
 
 
-def alert_security(sender_name, sender_location, sender_position):
+def alert_security(panic_name, panic_location, panic_phone, panic_position):
     recipients_list = UserAccount.objects.all()
  
     text = ""
@@ -41,7 +41,7 @@ def alert_security(sender_name, sender_location, sender_position):
     api_key = "e4b5af86e89730ad30564ac6d12ea45f8031c514"
     sender  = "RESOLUTE"
 
-    message = f"{sender_name} of {sender_location} just pushed a panic alert. \n See location: http://www.google.com/maps/place/{sender_position.lat},{sender_position.lng}"
+    message = f"{panic_name} of {panic_location} just pushed a panic alert. \nCall: {panic_phone}.\n\nSee location: http://www.google.com/maps/place/{panic_position.lat},{panic_position.lng}"
 
 
     url = f"http://api.ebulksms.com:8080/sendsms?username={username}&apikey={api_key}&sender={sender}&messagetext={message}&flash=0&recipients={recipients}"

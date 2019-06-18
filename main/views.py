@@ -417,7 +417,7 @@ def create_panic(request):
                         new_position = Positions(user =logged_user.user, incident = new_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
                         # new_position.save()
 
-                        alert_security(logged_user.full_name, logged_user.community, new_position)
+                        alert_security(logged_user.full_name, logged_user.community, logged_user.phone, new_position)
 
                         last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
 
@@ -479,7 +479,7 @@ def create_panic(request):
 
                         ##ALERT SECURITY
 
-                        alert_security("{} {}".format(logged_user.name, logged_user.surname ), logged_user.address, new_position)
+                        alert_security("{} {}".format(logged_user.name, logged_user.surname ), logged_user.address, logged_user.phone, new_position)
 
                         last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
 
