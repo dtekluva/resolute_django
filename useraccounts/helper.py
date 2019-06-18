@@ -37,8 +37,8 @@ def alert_security(panic_name, panic_location, panic_phone, panic_position):
 
     recipients = text[:-1]
 
-    username = "joseph@yourbudgit.com"
-    api_key = "e4b5af86e89730ad30564ac6d12ea45f8031c514"
+    username = "joseph@univelcity.com"
+    api_key = "d5f6b1f22da4663d6983a93ffabaedca4b8c78d0"
     sender  = "RESOLUTE"
 
     message = f"{panic_name} of {panic_location} just pushed a panic alert. \nCall: {panic_phone}.\n\nSee location: http://www.google.com/maps/place/{panic_position.lat},{panic_position.lng}"
