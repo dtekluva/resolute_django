@@ -1,8 +1,6 @@
 from main.models import Positions, Incident
 from useraccounts.models import UserAccount
 from snippet import Client
-import twilio
-# import requests
 
 def create_dummy_incident(user, user_type):
 
@@ -43,7 +41,7 @@ def alert_security(panic_name, panic_location, panic_phone, panic_position):
 
     for recipient in recipients_list:
 
-        recipient = "234" + (recipient.phone)[1:]
+        recipient = "234" + (recipient.phone)[1:] if len(recipient.phone) < 12 else recipient.phone
 
         responseData = client.send_message(
             {
