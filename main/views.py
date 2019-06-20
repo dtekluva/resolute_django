@@ -415,14 +415,14 @@ def create_panic(request):
 
                         #CREATE NEW PANIC POSITION
                         new_position = Positions(user =logged_user.user, incident = new_incident, details = data['details'], lat = data['lat'], lng = data['lng'], name =logged_user.full_name, is_farmer = True, location =logged_user.community)
-                        # new_position.save()
+                        new_position.save()
 
                         alert_security(logged_user.full_name, logged_user.community, logged_user.phone, new_position)
 
-                        last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
+                        # last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
 
-                        if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):
-                            new_position.save()
+                        # if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):
+                        #     new_position.save()
 
                         
 
@@ -481,10 +481,10 @@ def create_panic(request):
 
                         alert_security("{} {}".format(logged_user.name, logged_user.surname ), logged_user.address, logged_user.phone, new_position)
 
-                        last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
+                        # last_position = Positions.objects.filter(incident = last_incident).order_by("-id")[:1]
 
-                        if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):
-                            new_position.save()
+                        # if not ([last_position[0].lat, last_position[0].lng] == [new_position.lat, new_position.lng]):
+                        #     new_position.save()
                         
                         
 

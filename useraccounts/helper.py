@@ -1,6 +1,8 @@
 from main.models import Positions, Incident
 from useraccounts.models import UserAccount
-import requests
+from snippet import Client
+import twilio
+# import requests
 
 def create_dummy_incident(user, user_type):
 
@@ -29,24 +31,29 @@ def create_dummy_position(user, incident, user_type):
 
 
 def alert_security(panic_name, panic_location, panic_phone, panic_position):
+    print("REACHED HERE ATLAST WOOHOO")
     recipients_list = UserAccount.objects.all()
  
-    text = ""
-    for recipient in recipients_list:
-        text += f"{recipient.phone},"
-
-    recipients = text[:-1]
-
-    username = "joseph@univelcity.com"
-    api_key = "d5f6b1f22da4663d6983a93ffabaedca4b8c78d0"
-    sender  = "RESOLUTE"
-
     message = f"{panic_name} of {panic_location} just pushed a panic alert. \nCall: {panic_phone}.\n\nSee location: http://www.google.com/maps/place/{panic_position.lat},{panic_position.lng}"
 
 
-    url = f"http://api.ebulksms.com:8080/sendsms?username={username}&apikey={api_key}&sender={sender}&messagetext={message}&flash=0&recipients={recipients}"
+    account_key = '533627b3' 
+    secret = 'ckLc6G8YwK2oBhAl' 
+    client = Client(key=account_key, secret=secret)
 
-    response = requests.get(url)
+    for recipient in recipients_list:
 
-    print(response.text, recipients)
-    print(message)
+        recipient = "234" + (recipient.phone)[1:]
+
+        responseData = client.send_message(
+            {
+                "from": "RESOLUTE",
+                "to": recipient,
+                "text": message
+            }
+        )
+
+        if responseData["messages"][0]["status"] == "0":
+            print(f"Message sent to {recipient} successfully.")
+        else:
+            print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
