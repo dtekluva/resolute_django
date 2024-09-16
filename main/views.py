@@ -36,6 +36,11 @@ def detail_view(request):
 
     return render(request, 'resolute/skin-compact.html', {"herdsman":herdsman})
 
+##maing few changes
+def temp():
+    pass
+
+    
 @login_required
 def table(request):
 
@@ -54,7 +59,7 @@ def logs(request):
 @csrf_exempt
 def incidents(request):
 
-    incidents = Incident.objects.all().order_by('-id')[:250]
+    incidents = Incident.objects.all().order_by('-id')[:100]
     page = 'incidents'
 
     return render(request, 'resolute/main/incident.html', {'page': page, 'incidents':incidents})
